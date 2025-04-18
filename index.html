@@ -39,42 +39,146 @@
                 -ms-overflow-style: none;
                 scrollbar-width: none;
             }
+
+            .carousel-container {
+                position: relative;
+            }
+
+            .carousel {
+                display: flex;
+                overflow-x: scroll;
+                scroll-behavior: smooth;
+                gap: 16px;
+                padding: 8px 0;
+            }
+
+            .carousel-item {
+                flex: 0 0 auto;
+            }
+
+            .carousel-nav-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 40px;
+                height: 40px;
+                background-color: rgba(0, 0, 0, 0.7);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .carousel-container:hover .carousel-nav-button {
+                opacity: 1;
+            }
+
+            .carousel-nav-prev {
+                left: -8px;
+            }
+
+            .carousel-nav-next {
+                right: -8px;
+            }
+
+            .section-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            /* Sidebar transition */
+            .sidebar {
+                transition: width 0.3s ease;
+                overflow-x: hidden;
+                width: 280px;
+            }
+
+            .sidebar.collapsed {
+                width: 80px;
+            }
+
+            .sidebar-text {
+                white-space: nowrap;
+                transition: opacity 0.2s ease;
+            }
+
+            .sidebar.collapsed .sidebar-text {
+                opacity: 0;
+            }
+
+            .sidebar.collapsed .sidebar-collapse-only {
+                display: none;
+            }
+
+            /* Center items in collapsed state */
+            .sidebar.collapsed button {
+                justify-content: center;
+            }
+
+            .sidebar.collapsed .flex.items-center.gap-3 {
+                justify-content: center;
+            }
+
+            .sidebar-toggle {
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+            }
         </style>
     </head>
 
     <body class="bg-black text-white h-screen overflow-hidden">
-        <div class="grid h-full grid-cols-[280px_1fr] grid-rows-[1fr_80px]">
+        <div class="grid h-full grid-rows-[1fr_80px]" style="grid-template-columns: auto 1fr;">
             <!-- Sidebar -->
-            <div class="flex flex-col gap-2 p-2">
+            <div id="sidebar" class="sidebar flex flex-col gap-2 p-2 relative">
+
                 <div class="rounded-md bg-[#121212] p-4">
                     <div class="flex flex-col gap-4">
                         <button
                             class="flex items-center justify-start gap-4 text-white hover:text-white/80 w-full text-left px-2 py-1 rounded-md">
-                            <i data-lucide="home" class="h-6 w-6"></i>
-                            <span class="font-semibold">Home</span>
+                            <i data-lucide="home" class="h-6 w-6 "></i>
+                            <span class="font-semibold sidebar-text sidebar-collapse-only">Home</span>
                         </button>
                         <button
                             class="flex items-center justify-start gap-4 text-white hover:text-white/80 w-full text-left px-2 py-1 rounded-md">
                             <i data-lucide="search" class="h-6 w-6"></i>
-                            <span class="font-semibold">Search</span>
+                            <span class="font-semibold sidebar-text sidebar-collapse-only">Search</span>
                         </button>
                     </div>
                 </div>
                 <div class="flex flex-col rounded-md bg-[#121212] p-4 h-full">
                     <div class="flex items-center justify-between">
                         <button
-                            class="flex items-center justify-start gap-2 text-white/70 hover:text-white px-2 py-1 rounded-md">
-                            <i data-lucide="library" class="h-6 w-6"></i>
-                            <span class="font-semibold">Your Library</span>
+                            id="sidebar-toggle"
+                            class=" sidebar-toggle flex items-center justify-start gap-2 text-white/70 hover:text-white px-2 py-1 rounded-md">
+                            <i data-lucide="library" class="text-white h-6 w-6 shrink-0 "></i>
+                            <span class="font-semibold sidebar-text sidebar-collapse-only">Your Library</span>
                         </button>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 sidebar-collapse-only">
                             <button
                                 class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
                                 <i data-lucide="plus" class="h-5 w-5"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="mt-4 space-y-1">
+
+                    <!-- Plus button for collapsed state - always visible -->
+                    <div class="mt-4 flex justify-center items-center">
+                        <button
+                            class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
+                            <i data-lucide="plus" class="h-5 w-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 space-y-1 sidebar-collapse-only">
                         <div class="flex gap-2">
                             <button
                                 class="h-7 rounded-full bg-[#232323] text-white hover:bg-[#2a2a2a] px-3 py-1 text-sm">
@@ -86,7 +190,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center justify-between">
+                    <div class="mt-4 flex items-center justify-between sidebar-collapse-only">
                         <button
                             class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
                             <i data-lucide="search" class="h-4 w-4"></i>
@@ -104,7 +208,7 @@
                                     <img src="images/ab67706f00000002db51470ffe92dddd624dab8e.jpeg" alt="Liked Songs"
                                         class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Liked Songs</span>
                                     <span class="text-xs text-white/70">Playlist • You</span>
                                 </div>
@@ -116,7 +220,7 @@
                                     <img src="images/ab67706f00000002bbcbed9525de853449ebd028.jpeg"
                                         alt="Discover Weekly" class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Discover Weekly</span>
                                     <span class="text-xs text-white/70">Playlist • Spotify</span>
                                 </div>
@@ -128,7 +232,7 @@
                                     <img src="images/ab67706f00000002baf87fa47b70215fb7adf099.jpeg" alt="Release Radar"
                                         class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Release Radar</span>
                                     <span class="text-xs text-white/70">Playlist • Spotify</span>
                                 </div>
@@ -140,7 +244,7 @@
                                     <img src="images/ab67706f00000002e863ce9df6955fed82d56257.jpeg" alt="Chill Hits"
                                         class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Chill Hits</span>
                                     <span class="text-xs text-white/70">Playlist • Spotify</span>
                                 </div>
@@ -152,7 +256,7 @@
                                     <img src="images/ab67706f00000002a1b8f967c83f8a234ab92444.jpeg" alt="Rock Classics"
                                         class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Rock Classics</span>
                                     <span class="text-xs text-white/70">Playlist • Spotify</span>
                                 </div>
@@ -164,7 +268,7 @@
                                     <img src="images/ab67706f000000029528f6707bdd37467b98824a.jpeg" alt="Daily Mix 1"
                                         class="object-cover h-full w-full">
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col sidebar-collapse-only">
                                     <span class="text-sm font-medium text-white">Daily Mix 1</span>
                                     <span class="text-xs text-white/70">Playlist • Spotify</span>
                                 </div>
@@ -176,7 +280,7 @@
 
             <!-- Main Content -->
             <div class="relative overflow-hidden">
-                <div class="absolute inset-0 flex flex-col bg-gradient-to-b from-[#1e1e1e] to-[#121212]">
+                <div class="absolute inset-0 flex flex-col bg-[#121212]">
                     <header class="flex items-center justify-between p-4">
                         <div class="flex items-center gap-2">
                             <button
@@ -305,198 +409,436 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2 class="mt-8 text-xl font-bold text-white">Made for You</h2>
-                            <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                                <!-- Recommended Playlist 1 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer"
-                                    data-playlist-id="daily-mix-1">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
-                                            alt="Daily Mix 1" class="object-cover h-full w-full">
-                                        <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-sm font-medium text-white">Daily Mix 1</h3>
-                                    <p class="mt-1 text-xs text-white/70">Kendrick Lamar, Drake, J. Cole and more</p>
-                                </div>
-                                <!-- Recommended Playlist 2 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer"
-                                    data-playlist-id="daily-mix-2">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg"
-                                            alt="Daily Mix 2" class="object-cover h-full w-full">
-                                        <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-sm font-medium text-white">Daily Mix 2</h3>
-                                    <p class="mt-1 text-xs text-white/70">The Weeknd, Doja Cat, Post Malone and more</p>
-                                </div>
-                                <!-- Recommended Playlist 3 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer"
-                                    data-playlist-id="daily-mix-3">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
-                                            alt="Daily Mix 3" class="object-cover h-full w-full">
-                                        <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-sm font-medium text-white">Daily Mix 3</h3>
-                                    <p class="mt-1 text-xs text-white/70">Coldplay, Imagine Dragons, OneRepublic and
-                                        more</p>
-                                </div>
-                                <!-- Recommended Playlist 4 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer"
-                                    data-playlist-id="discover-weekly">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
-                                            alt="Discover Weekly" class="object-cover h-full w-full">
-                                        <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-sm font-medium text-white">Discover Weekly</h3>
-                                    <p class="mt-1 text-xs text-white/70">Your weekly mixtape of fresh music</p>
-                                </div>
-                                <!-- Recommended Playlist 5 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer"
-                                    data-playlist-id="release-radar">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b2733b7ae221866b5e81daf4483f.jpeg"
-                                            alt="Release Radar" class="object-cover h-full w-full">
-                                        <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-sm font-medium text-white">Release Radar</h3>
-                                    <p class="mt-1 text-xs text-white/70">Catch all the latest music from artists you
-                                        follow</p>
-                                </div>
+
+                            <!-- It's New Music Friday Section -->
+                            <div class="section-header mt-8">
+                                <h2 class="text-2xl font-bold text-white">It's New Music Friday!</h2>
+                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
                             </div>
-                            <h2 class="mt-8 text-xl font-bold text-white">Recently Played</h2>
-                            <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                                <!-- Recently Played 1 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b273ad204486839062991becfbc9.jpeg"
-                                            alt="Today's Top Hits" class="object-cover h-full w-full">
+                            <div class="carousel-container">
+                                <button class="carousel-nav-button carousel-nav-prev" data-carousel="new-music-friday">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <div class="carousel scrollbar-hide" id="new-music-friday-carousel">
+                                    <!-- New Music Friday -->
+                                    <div class="carousel-item w-44">
                                         <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
+                                                    alt="New Music Friday India" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">New Music Friday</h3>
+                                                <p class="mt-1 text-sm text-white/70">Handpicked fresh new international
+                                                    music from...</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-white">Today's Top Hits</h3>
-                                    <p class="mt-1 text-xs text-white/70">By Spotify</p>
-                                </div>
-                                <!-- Recently Played 2 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg" alt="RapCaviar"
-                                            class="object-cover h-full w-full">
+
+                                    <!-- Release Radar -->
+                                    <div class="carousel-item w-44">
                                         <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg"
+                                                    alt="Release Radar" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Release Radar</h3>
+                                                <p class="mt-1 text-sm text-white/70">Catch all the latest music from
+                                                    artists you follow</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-white">RapCaviar</h3>
-                                    <p class="mt-1 text-xs text-white/70">By Spotify</p>
-                                </div>
-                                <!-- Recently Played 3 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg"
-                                            alt="All Out 2010s" class="object-cover h-full w-full">
+
+                                    <!-- Latest Romance Telugu -->
+                                    <div class="carousel-item w-44">
                                         <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
+                                                    alt="Latest Romance Telugu" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Latest Romance Telugu</h3>
+                                                <p class="mt-1 text-sm text-white/70">Bringing out the best of latest
+                                                    love tracks</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-white">All Out 2010s</h3>
-                                    <p class="mt-1 text-xs text-white/70">By Spotify</p>
-                                </div>
-                                <!-- Recently Played 4 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg"
-                                            alt="Rock Classics" class="object-cover h-full w-full">
+
+                                    <!-- Latest Love Tamil -->
+                                    <div class="carousel-item w-44">
                                         <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg"
+                                                    alt="Latest Love Tamil" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Latest Love Tamil</h3>
+                                                <p class="mt-1 text-sm text-white/70">Check out the Latest Romance
+                                                    Tracks</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-white">Rock Classics</h3>
-                                    <p class="mt-1 text-xs text-white/70">By Spotify</p>
-                                </div>
-                                <!-- Recently Played 5 -->
-                                <div
-                                    class="group rounded-md bg-[#181818] p-4 transition-colors hover:bg-[#282828] cursor-pointer">
-                                    <div
-                                        class="relative mb-4 aspect-square overflow-hidden rounded-md shadow-md bg-[#333333]">
-                                        <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg" alt="Chill Hits"
-                                            class="object-cover h-full w-full">
+
+                                    <!-- Latest Dance Telugu -->
+                                    <div class="carousel-item w-44">
                                         <div
-                                            class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                            <button
-                                                class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center">
-                                                <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                            </button>
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
+                                                    alt="Latest Dance Telugu" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Latest Dance Telugu</h3>
+                                                <p class="mt-1 text-sm text-white/70">Head to the dance floor with these
+                                                    latest Telugu hits</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-white">Chill Hits</h3>
-                                    <p class="mt-1 text-xs text-white/70">By Spotify</p>
+
+                                    <!-- New in Dance -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
+                                                    alt="New in Dance" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">New in Dance</h3>
+                                                <p class="mt-1 text-sm text-white/70">Feel the heat & get high on the
+                                                    dance floor</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <button class="carousel-nav-button carousel-nav-next" data-carousel="new-music-friday">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Made For You Section -->
+                            <div class="section-header mt-8">
+                                <h2 class="text-2xl font-bold text-white">Made For Ayush Shah</h2>
+                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                            </div>
+                            <div class="carousel-container">
+                                <button class="carousel-nav-button carousel-nav-prev" data-carousel="made-for-you">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <div class="carousel scrollbar-hide" id="made-for-you-carousel">
+                                    <!-- Daily Mix 1 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
+                                                    alt="Daily Mix 1" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Daily Mix 1</h3>
+                                                <p class="mt-1 text-sm text-white/70">Yo Yo Honey Singh, Guru Randhawa
+                                                    and more</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Daily Mix 2 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg"
+                                                    alt="Daily Mix 2" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Daily Mix 2</h3>
+                                                <p class="mt-1 text-sm text-white/70">The latest from Bollywood
+                                                    blockbusters</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Daily Mix 3 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
+                                                    alt="Daily Mix 3" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Daily Mix 3</h3>
+                                                <p class="mt-1 text-sm text-white/70">Arijit Singh, Atif Aslam, and more
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Daily Mix 4 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg"
+                                                    alt="Daily Mix 4" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Daily Mix 4</h3>
+                                                <p class="mt-1 text-sm text-white/70">Aditya Rikhari, The Local Train
+                                                    and more</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Daily Mix 5 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
+                                                    alt="Daily Mix 5" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Daily Mix 5</h3>
+                                                <p class="mt-1 text-sm text-white/70">Geek Music, Miura Jam, RADWIMPS
+                                                    and more</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Discover Weekly -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
+                                                    alt="Discover Weekly" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Discover Weekly</h3>
+                                                <p class="mt-1 text-sm text-white/70">Your weekly mixtape of fresh music
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav-button carousel-nav-next" data-carousel="made-for-you">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Popular albums and singles -->
+                            <div class="section-header mt-8">
+                                <h2 class="text-2xl font-bold text-white">Popular albums and singles</h2>
+                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                            </div>
+                            <div class="carousel-container">
+                                <button class="carousel-nav-button carousel-nav-prev" data-carousel="popular-albums">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <div class="carousel scrollbar-hide" id="popular-albums-carousel">
+                                    <!-- Album 1 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273ad204486839062991becfbc9.jpeg"
+                                                    alt="Jashm-E-Ishq" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Jashm-E-Ishq</h3>
+                                                <p class="mt-1 text-sm text-white/70">By Arijit Singh</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Album 2 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
+                                                    alt="Aashiqui 2" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Aashiqui 2</h3>
+                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Album 3 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg"
+                                                    alt="Tamasha" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Tamasha</h3>
+                                                <p class="mt-1 text-sm text-white/70">By A.R. Rahman</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Album 4 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
+                                                    alt="Kabir Singh" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Kabir Singh</h3>
+                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Album 5 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg"
+                                                    alt="Retro Classics" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Retro Classics</h3>
+                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav-button carousel-nav-next" data-carousel="popular-albums">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -581,6 +923,48 @@
         <script>
             // Initialize Lucide icons
             lucide.createIcons();
+
+            // Carousel navigation
+            document.addEventListener('DOMContentLoaded', function () {
+                const carouselNavButtons = document.querySelectorAll('.carousel-nav-button');
+
+                carouselNavButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const carouselId = this.getAttribute('data-carousel');
+                        const direction = this.classList.contains('carousel-nav-prev') ? -1 : 1;
+                        const carousel = document.getElementById(`${carouselId}-carousel`);
+
+                        const scrollAmount = direction * carousel.offsetWidth * 0.8;
+                        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                    });
+                });
+
+                // Sidebar toggle functionality
+                const sidebarToggle = document.getElementById('sidebar-toggle');
+                const sidebar = document.getElementById('sidebar');
+                const toggleIcon = document.querySelector('.toggle-icon');
+                const closeIcon = document.querySelector('.close-icon');
+                const collapsedPlusButton = document.querySelector('.mt-4.flex.justify-center.items-center');
+
+                // Initially hide the collapsed state plus button if sidebar is expanded
+                if (!sidebar.classList.contains('collapsed')) {
+                    collapsedPlusButton.style.display = 'none';
+                }
+
+                sidebarToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('collapsed');
+
+                    // Toggle visibility of the plus button based on sidebar state
+                    if (sidebar.classList.contains('collapsed')) {
+                        toggleIcon.setAttribute('data-lucide', 'chevron-right');
+                        collapsedPlusButton.style.display = 'flex';
+                    } else {
+                        toggleIcon.setAttribute('data-lucide', 'chevron-left');
+                        collapsedPlusButton.style.display = 'none';
+                    }
+                    lucide.createIcons(); // Recreate icons to update the toggle icon
+                });
+            });
         </script>
     </body>
 
