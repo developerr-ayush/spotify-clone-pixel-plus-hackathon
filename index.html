@@ -27,8 +27,71 @@
             }
         </script>
         <style>
+            :root {
+                --background-base: #121212;
+                --background-card: #181818;
+                --background-card-hover: #282828;
+                --text-primary: #ffffff;
+                --text-subdued: #a7a7a7;
+                --brand-color: #1ed760;
+                --sidebar-width: 280px;
+                --topbar-height: 64px;
+                --now-playing-height: 90px;
+                --gradient-start: #533051;
+            }
+
+            /* Light theme variables */
+            body[data-theme="light"] {
+                --background-base: #ffffff;
+                --background-card: #f0f0f0;
+                --background-card-hover: #e0e0e0;
+                --text-primary: #121212;
+                --text-subdued: #606060;
+                --brand-color: #1db954;
+                --border-color: #e0e0e0;
+                --background-highlight: #f7f7f7;
+                --background-elevated-base: #e6e6e6;
+                --background-tinted-base: #d3d3d3;
+                --essential-base: #1db954;
+                --text-base: #121212;
+                --text-secondary: #606060;
+                --gradient-start: #9c87a0;
+            }
+
+            /* Dark theme variables - adding extra variables that are used but not defined in :root */
+            body[data-theme="dark"] {
+                --border-color: #292929;
+                --background-highlight: #1a1a1a;
+                --background-elevated-base: #333333;
+                --background-tinted-base: #2a2a2a;
+                --essential-base: #1db954;
+                --text-base: #ffffff;
+                --text-secondary: #a7a7a7;
+                --gradient-start: #533051;
+            }
+
             body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-family: 'Circular Std', Arial, sans-serif;
+                background-color: var(--background-base);
+                color: var(--text-primary);
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                height: 100vh;
+            }
+
+            img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+
+            .relative {
+                position: relative;
+            }
+
+            .absolute {
+                position: absolute;
             }
 
             .scrollbar-hide::-webkit-scrollbar {
@@ -40,16 +103,323 @@
                 scrollbar-width: none;
             }
 
+            #app {
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .main-container {
+                display: flex;
+                height: calc(100vh - var(--now-playing-height));
+            }
+
+            .sidebar {
+                width: var(--sidebar-width);
+                background-color: var(--background-highlight);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .sidebar-section {
+                padding: 24px 16px;
+            }
+
+            .nav-item {
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                border-radius: 4px;
+                color: var(--text-subdued);
+                font-weight: 600;
+                transition: color 0.2s;
+                text-decoration: none;
+            }
+
+            .nav-item:hover {
+                color: var(--text-primary);
+            }
+
+            .nav-item.active {
+                color: var(--text-primary);
+            }
+
+            .nav-item i {
+                margin-right: 16px;
+                font-size: 20px;
+            }
+
+            .library-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 12px;
+                color: var(--text-subdued);
+            }
+
+            .library-header .icon {
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            .library-header .icon:hover {
+                color: var(--text-primary);
+            }
+
+            .library-controls {
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                overflow-x: auto;
+            }
+
+            .control-button {
+                background: rgba(255, 255, 255, 0.1);
+                border: none;
+                color: white;
+                padding: 6px 12px;
+                border-radius: 20px;
+                margin-right: 8px;
+                font-size: 14px;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .control-button:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            .library-items {
+                overflow-y: auto;
+                flex: 1;
+            }
+
+            .library-item {
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                border-radius: 4px;
+                transition: background-color 0.2s;
+            }
+
+            .library-item:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            .library-item-img {
+                width: 48px;
+                height: 48px;
+                margin-right: 12px;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+
+            .library-item-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .library-item-title {
+                font-weight: 600;
+                margin: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .library-item-subtitle {
+                color: var(--text-subdued);
+                font-size: 14px;
+                margin: 4px 0 0;
+            }
+
+            .main-view {
+                flex: 1;
+                background: linear-gradient(to bottom, var(--gradient-start), var(--background-base) 400px);
+                overflow-y: auto;
+                padding: 0;
+            }
+
+            .topbar {
+                height: var(--topbar-height);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 32px;
+                position: sticky;
+                top: 0;
+                background-color: transparent;
+                z-index: 10;
+            }
+
+            .topbar-buttons {
+                display: flex;
+                gap: 16px;
+            }
+
+            .topbar-button {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-primary);
+                border: none;
+                cursor: pointer;
+            }
+
+            .user-menu {
+                display: flex;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.7);
+                border-radius: 50px;
+                padding: 2px;
+                cursor: pointer;
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background-color: #535353;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 8px;
+            }
+
+            .user-name {
+                margin-right: 8px;
+                font-weight: 700;
+            }
+
+            .content-container {
+                padding: 0 32px 32px;
+            }
+
+            .content-header {
+                display: flex;
+                align-items: flex-end;
+                padding: 32px 0;
+            }
+
+            .content-img {
+                width: 192px;
+                height: 192px;
+                margin-right: 24px;
+                box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+            }
+
+            .content-info {
+                flex: 1;
+            }
+
+            .content-type {
+                font-size: 14px;
+                font-weight: 700;
+                margin: 0 0 8px;
+            }
+
+            .content-title {
+                font-size: 48px;
+                font-weight: 900;
+                margin: 0 0 24px;
+            }
+
+            .content-details {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                color: var(--text-subdued);
+            }
+
+            .content-owner {
+                font-weight: 700;
+                color: var(--text-primary);
+            }
+
+            .dot-separator {
+                margin: 0 4px;
+            }
+
+            .content-actions {
+                display: flex;
+                align-items: center;
+                margin: 24px 0;
+            }
+
+            .play-button {
+                background-color: var(--brand-color);
+                color: black;
+                border: none;
+                border-radius: 50px;
+                padding: 16px 32px;
+                font-size: 16px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                margin-right: 16px;
+                transition: transform 0.2s;
+            }
+
+            .play-button:hover {
+                transform: scale(1.04);
+                background-color: #1fdf64;
+            }
+
+            .play-button i {
+                margin-right: 8px;
+            }
+
+            .action-icon {
+                color: var(--text-subdued);
+                font-size: 32px;
+                margin-right: 24px;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            .action-icon:hover {
+                color: var(--text-primary);
+            }
+
+            .section-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            .section-title {
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            .section-link {
+                color: var(--text-subdued);
+                font-size: 0.875rem;
+                font-weight: 700;
+            }
+
+            .section-link:hover {
+                color: var(--text-primary);
+            }
+
             .carousel-container {
                 position: relative;
             }
 
             .carousel {
                 display: flex;
-                overflow-x: scroll;
-                scroll-behavior: smooth;
-                gap: 16px;
+                gap: 24px;
+                overflow-x: auto;
                 padding: 8px 0;
+                scroll-behavior: smooth;
             }
 
             .carousel-item {
@@ -62,529 +432,397 @@
                 transform: translateY(-50%);
                 width: 40px;
                 height: 40px;
-                background-color: rgba(0, 0, 0, 0.7);
                 border-radius: 50%;
+                background-color: rgba(0, 0, 0, 0.7);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                z-index: 10;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .carousel-container:hover .carousel-nav-button {
-                opacity: 1;
+                cursor: pointer;
+                z-index: 5;
+                border: none;
+                color: white;
             }
 
             .carousel-nav-prev {
-                left: -8px;
+                left: -20px;
             }
 
             .carousel-nav-next {
-                right: -8px;
+                right: -20px;
             }
 
-            .section-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 16px;
-            }
-
-            /* Sidebar transition */
-            .sidebar {
-                transition: width 0.3s ease;
-                overflow-x: hidden;
-                width: 280px;
-            }
-
-            .sidebar.collapsed {
-                width: 80px;
-            }
-
-            .sidebar-text {
-                white-space: nowrap;
-                transition: opacity 0.2s ease;
-            }
-
-            .sidebar.collapsed .sidebar-text {
-                opacity: 0;
-            }
-
-            .sidebar.collapsed .sidebar-collapse-only {
-                display: none;
-            }
-
-            /* Center items in collapsed state */
-            .sidebar.collapsed button {
-                justify-content: center;
-            }
-
-            .sidebar.collapsed .flex.items-center.gap-3 {
-                justify-content: center;
-            }
-
-            .sidebar-toggle {
-                width: 24px;
-                height: 24px;
+            /* Now playing bar */
+            .now-playing-bar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 90px;
+                background-color: #181818;
+                border-top: 1px solid #282828;
+                z-index: 100;
                 display: flex;
                 align-items: center;
+                padding: 0 16px;
+            }
+
+            .now-playing-left {
+                width: 30%;
+                display: flex;
+                align-items: center;
+            }
+
+            .now-playing-cover {
+                width: 56px;
+                height: 56px;
+                margin-right: 14px;
+                overflow: hidden;
+            }
+
+            .now-playing-info h4 {
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .now-playing-info p {
+                margin: 0;
+                font-size: 11px;
+                color: var(--text-subdued);
+            }
+
+            .now-playing-center {
+                width: 40%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 justify-content: center;
-                z-index: 10;
+            }
+
+            .playback-controls {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 8px;
+            }
+
+            .play-button {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: black;
+            }
+
+            .playback-bar {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .progress-bar {
+                flex: 1;
+                height: 4px;
+                background-color: #535353;
+                border-radius: 2px;
+                position: relative;
+            }
+
+            .progress {
+                position: absolute;
+                height: 100%;
+                width: 30%;
+                background-color: var(--text-base);
+                border-radius: 2px;
+            }
+
+            .now-playing-right {
+                width: 30%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .volume-bar {
+                width: 100px;
+                height: 4px;
+                background-color: #535353;
+                border-radius: 2px;
+                position: relative;
+            }
+
+            .volume {
+                position: absolute;
+                height: 100%;
+                width: 70%;
+                background-color: var(--text-base);
+                border-radius: 2px;
+            }
+
+            /* Custom class for themed carousel items */
+            .carousel-card {
+                background-color: var(--background-card);
+                transition: background-color 0.2s;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                cursor: pointer;
+            }
+
+            .carousel-card:hover {
+                background-color: var(--background-card-hover);
+            }
+
+            .carousel-title {
+                color: var(--text-primary);
+                font-size: 1rem;
+                font-weight: 700;
+            }
+
+            .carousel-subtitle {
+                color: var(--text-subdued);
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
+
+            .play-btn {
+                background-color: var(--brand-color);
+                color: black;
+                border-radius: 9999px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .play-btn:hover {
+                transform: scale(1.04);
+                background-color: var(--brand-color);
+                filter: brightness(1.1);
             }
         </style>
     </head>
 
-    <body class="bg-black text-white h-screen overflow-hidden">
+    <body class="h-screen overflow-hidden" data-theme="dark">
         <div class="grid h-full grid-rows-[1fr_80px]" style="grid-template-columns: auto 1fr;">
             <!-- Sidebar -->
-            <div id="sidebar" class="sidebar flex flex-col gap-2 p-2 relative">
-
-                <div class="rounded-md bg-[#121212] p-4">
-                    <div class="flex flex-col gap-4">
+            <div id="sidebar" class="sidebar flex flex-col bg-black p-2 overflow-hidden" style="width: 300px;">
+                <!-- Home and Search buttons -->
+                <div class="rounded-md p-2 mb-2 bg-[#121212]">
+                    <div class="flex flex-col gap-4 px-2">
                         <button
-                            class="flex items-center justify-start gap-4 text-white hover:text-white/80 w-full text-left px-2 py-1 rounded-md">
-                            <i data-lucide="home" class="h-6 w-6 "></i>
-                            <span class="font-semibold sidebar-text sidebar-collapse-only">Home</span>
+                            class="flex items-center justify-start gap-4 hover:opacity-80 w-full text-left py-1 rounded-md">
+                            <i data-lucide="home" class="h-6 w-6 text-white"></i>
+                            <span class="font-bold text-white">Home</span>
                         </button>
                         <button
-                            class="flex items-center justify-start gap-4 text-white hover:text-white/80 w-full text-left px-2 py-1 rounded-md">
-                            <i data-lucide="search" class="h-6 w-6"></i>
-                            <span class="font-semibold sidebar-text sidebar-collapse-only">Search</span>
+                            class="flex items-center justify-start gap-4 hover:opacity-80 w-full text-left py-1 rounded-md">
+                            <i data-lucide="search" class="h-6 w-6 text-white"></i>
+                            <span class="font-bold text-white">Search</span>
                         </button>
                     </div>
                 </div>
-                <div class="flex flex-col rounded-md bg-[#121212] p-4 h-full">
-                    <div class="flex items-center justify-between">
-                        <button
-                            id="sidebar-toggle"
-                            class=" sidebar-toggle flex items-center justify-start gap-2 text-white/70 hover:text-white px-2 py-1 rounded-md">
-                            <i data-lucide="library" class="text-white h-6 w-6 shrink-0 "></i>
-                            <span class="font-semibold sidebar-text sidebar-collapse-only">Your Library</span>
-                        </button>
-                        <div class="flex items-center gap-2 sidebar-collapse-only">
-                            <button
-                                class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
-                                <i data-lucide="plus" class="h-5 w-5"></i>
+
+                <div class="rounded-md p-2 flex-1 overflow-hidden flex flex-col">
+                    <div class="flex items-center justify-between px-2 py-4">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="library" class="h-6 w-6 text-white"></i>
+                            <span class="font-bold text-white text-base">Your Library</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
+                                <i data-lucide="plus" class="h-5 w-5 text-white"></i>
+                            </button>
+                            <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
+                                <i data-lucide="arrow-right" class="h-5 w-5 text-white"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Plus button for collapsed state - always visible -->
-                    <div class="mt-4 flex justify-center items-center">
+                    <!-- Filter buttons -->
+                    <div class="flex gap-2 px-2 py-2 overflow-x-auto scrollbar-hide">
                         <button
-                            class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
-                            <i data-lucide="plus" class="h-5 w-5"></i>
+                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                            Playlists
+                        </button>
+                        <button
+                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                            Artists
+                        </button>
+                        <button
+                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                            Albums
+                        </button>
+                        <button
+                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                            Podcasts & Shows
                         </button>
                     </div>
 
-                    <div class="mt-4 space-y-1 sidebar-collapse-only">
-                        <div class="flex gap-2">
-                            <button
-                                class="h-7 rounded-full bg-[#232323] text-white hover:bg-[#2a2a2a] px-3 py-1 text-sm">
-                                Playlists
-                            </button>
-                            <button
-                                class="h-7 rounded-full bg-[#232323] text-white hover:bg-[#2a2a2a] px-3 py-1 text-sm">
-                                Artists
-                            </button>
+                    <!-- Search and sort -->
+                    <div class="flex items-center justify-between px-2 py-2">
+                        <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
+                            <i data-lucide="search" class="h-4 w-4 text-white"></i>
+                        </button>
+                        <div class="flex items-center gap-1">
+                            <span class="text-sm text-[#a7a7a7] font-medium">Recents</span>
+                            <i data-lucide="list" class="h-4 w-4 text-[#a7a7a7]"></i>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center justify-between sidebar-collapse-only">
-                        <button
-                            class="h-8 w-8 text-white/70 hover:text-white rounded-full flex items-center justify-center">
-                            <i data-lucide="search" class="h-4 w-4"></i>
-                        </button>
-                        <button class="text-sm text-white/70 hover:text-white px-2 py-1 rounded-md">
-                            Recents
-                        </button>
-                    </div>
-                    <div class="mt-4 h-full overflow-y-auto scrollbar-hide">
-                        <div class="space-y-4">
-                            <!-- Playlist 1 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="liked-songs">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f00000002db51470ffe92dddd624dab8e.jpeg" alt="Liked Songs"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Liked Songs</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
-                            </div>
-                            <!-- Playlist 2 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="discover-weekly">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f00000002bbcbed9525de853449ebd028.jpeg"
-                                        alt="Discover Weekly" class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Discover Weekly</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
-                            <!-- Playlist 3 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="release-radar">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f00000002baf87fa47b70215fb7adf099.jpeg" alt="Release Radar"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Release Radar</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
-                            <!-- Playlist 4 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="chill-hits">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f00000002e863ce9df6955fed82d56257.jpeg" alt="Chill Hits"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Chill Hits</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
-                            <!-- Playlist 5 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="rock-classics">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f00000002a1b8f967c83f8a234ab92444.jpeg" alt="Rock Classics"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Rock Classics</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
-                            <!-- Playlist 6 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="daily-mix-1">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f000000029528f6707bdd37467b98824a.jpeg" alt="Daily Mix 1"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Daily Mix 1</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
 
-                            <!-- Playlist 7 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="hip-hop-vibes">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67706f000000026404721c1943d5069f0805f3.jpeg" alt="Hip Hop Vibes"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Hip Hop Vibes</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
+                    <!-- Library items -->
+                    <div class="mt-2 overflow-y-auto h-full scrollbar-hide flex-1">
+                        <!-- Liked Songs -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div
+                                class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center">
+                                <i data-lucide="heart" class="h-6 w-6 text-white"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Liked Songs</span>
+                                <div class="flex items-center gap-1">
+                                    <i data-lucide="pin" class="h-3 w-3 text-green-500"></i>
+                                    <span class="text-sm text-[#a7a7a7]">Playlist • 345 songs</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Playlist 8 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="bollywood-hits">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg" alt="Bollywood Hits"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Bollywood Hits</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- mala + Ayush -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-red-900">
+                                <img src="images/ab67706f00000002cab73e6ac9bf4bf3c6931570.jpeg" alt="mala + Ayush"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 9 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="study-lofi">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg" alt="Study Lo-Fi"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Study Lo-Fi</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">mala + Ayush</span>
+                                <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 10 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="workout-mix">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg" alt="Workout Mix"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Workout Mix</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                        <!-- Charlie Puth -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg" alt="Charlie Puth"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 11 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="party-anthems">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg" alt="Party Anthems"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Party Anthems</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Charlie Puth</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 12 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="indie-folk">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg" alt="Indie Folk"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Indie Folk</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                        <!-- smooth changing mood -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
+                                    alt="smooth changing mood" class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 13 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="deep-focus">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg" alt="Deep Focus"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Deep Focus</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">smooth changing mood</span>
+                                <span class="text-sm text-[#a7a7a7]">Playlist • Joy :3</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 14 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="throwback-hits">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b273ad204486839062991becfbc9.jpeg" alt="Throwback Hits"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Throwback Hits</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- Trending Songs Hindi 2025 -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67706f00000002baf87fa47b70215fb7adf099.jpeg"
+                                    alt="Trending Songs Hindi" class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 15 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="new-releases">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg" alt="New Releases"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">New Releases</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Trending Songs Hindi 2025 - Best Viral
+                                    Hindi...</span>
+                                <span class="text-sm text-[#a7a7a7]">Playlist • Zusic</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 16 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="top-charts">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e024c81f86297c2e3fac6a4c6cd.jpg" alt="Top Charts"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Top Charts</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- Daily Mix 2 -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67706f000000029528f6707bdd37467b98824a.jpeg" alt="Daily Mix 2"
+                                    class="object-cover h-full w-full">
+                                <div
+                                    class="absolute bottom-0 right-0 bg-yellow-500 text-black text-xs font-bold h-4 w-4 flex items-center justify-center rounded-sm">
+                                    2</div>
                             </div>
-
-                            <!-- Playlist 17 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="summer-hits">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e0283141000ee8ce3b893a0b425.jpg" alt="Summer Hits"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Summer Hits</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Daily Mix 2</span>
+                                <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 18 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="acoustic-covers">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e0285c5968be0d0d9c545241124.jpg" alt="Acoustic Covers"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Acoustic Covers</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- pianime -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg" alt="pianime"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 19 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="trending-now">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02931b61b7382db17ed15e75fc.jpg" alt="Trending Now"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Trending Now</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">pianime</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 20 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="k-pop-hits">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e0298afca41c23a0f927ea9e327.jpg" alt="K-Pop Hits"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">K-Pop Hits</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                        <!-- Manu Pilas -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67706f00000002e863ce9df6955fed82d56257.jpeg" alt="Manu Pilas"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 21 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="travel-vibes">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02a5183fa4b99bcec1f506418d.jpg" alt="Travel Vibes"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Travel Vibes</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Manu Pilas</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 22 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="pop-classics">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02a9b24134021a9912bdab1f6.jpg" alt="Pop Classics"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Pop Classics</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- Anime Now -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67706f00000002a1b8f967c83f8a234ab92444.jpeg" alt="Anime Now"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 23 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="chill-evenings">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02b1a7fc692d68d8f5c8adfd2e.jpg" alt="Chill Evenings"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Chill Evenings</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Anime Now</span>
+                                <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 24 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="morning-coffee">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02bb25239324c4e16ae01fda36.jpg" alt="Morning Coffee"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Morning Coffee</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                        <!-- Akano -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67706f00000002db51470ffe92dddd624dab8e.jpeg" alt="Akano"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 25 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="jazz-essentials">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02c60d50433ca011cd40e62f25.jpg" alt="Jazz Essentials"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Jazz Essentials</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Akano</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 26 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="focus-mode">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab676161000051740f0be2054fe9594026a6b843.jpg" alt="Focus Mode"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Focus Mode</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                        <!-- Geek Music -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div
+                                class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-black flex items-center justify-center">
+                                <i data-lucide="music" class="h-6 w-6 text-white"></i>
                             </div>
-
-                            <!-- Playlist 27 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="classical-collection">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab676161000051745ba2d75eb08a2d672f9b69b7.jpg"
-                                        alt="Classical Collection"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Classical Collection</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">Geek Music</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
+                        </div>
 
-                            <!-- Playlist 28 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="running-mix">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab676161000051748de0e6e7e55d7773931ab7f4.jpg" alt="Running Mix"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Running Mix</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                        <!-- A.R. Rahman -->
+                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                            <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
+                                <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg" alt="A.R. Rahman"
+                                    class="object-cover h-full w-full">
                             </div>
-
-                            <!-- Playlist 29 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="gaming-playlist">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab6761610000517490b6c3d093f9b02aad628eaf.jpg" alt="Gaming Playlist"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Gaming Playlist</span>
-                                    <span class="text-xs text-white/70">Playlist • Spotify</span>
-                                </div>
-                            </div>
-
-                            <!-- Playlist 30 -->
-                            <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer"
-                                data-playlist-id="rainy-day-vibes">
-                                <div class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                    <img src="images/ab67616d00001e02f000fdbe92e9a1058034fd33.jpg" alt="Rainy Day Vibes"
-                                        class="object-cover h-full w-full">
-                                </div>
-                                <div class="flex flex-col sidebar-collapse-only">
-                                    <span class="text-sm font-medium text-white">Rainy Day Vibes</span>
-                                    <span class="text-xs text-white/70">Playlist • You</span>
-                                </div>
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-white">A.R. Rahman</span>
+                                <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
                     </div>
@@ -593,38 +831,46 @@
 
             <!-- Main Content -->
             <div class="relative overflow-hidden">
-                <div class="absolute inset-0 flex flex-col bg-[#121212]">
+                <div class="absolute inset-0 flex flex-col" style="background-color: var(--background-base);">
                     <header class="flex items-center justify-between p-4">
                         <div class="flex items-center gap-2">
                             <button
-                                class="h-8 w-8 rounded-full bg-black/60 text-white flex items-center justify-center">
+                                class="h-8 w-8 rounded-full flex items-center justify-center"
+                                style="background-color: var(--background-tinted-base); color: var(--text-base);">
                                 <i data-lucide="chevron-left" class="h-5 w-5"></i>
                             </button>
                             <button
-                                class="h-8 w-8 rounded-full bg-black/60 text-white flex items-center justify-center">
+                                class="h-8 w-8 rounded-full flex items-center justify-center"
+                                style="background-color: var(--background-tinted-base); color: var(--text-base);">
                                 <i data-lucide="chevron-right" class="h-5 w-5"></i>
                             </button>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button class="text-sm font-medium text-white px-4 py-2 rounded-full hover:scale-105">
+                            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                                <i data-lucide="sun" class="h-5 w-5 dark-mode-only"></i>
+                                <i data-lucide="moon" class="h-5 w-5 light-mode-only hidden"></i>
+                            </button>
+                            <button class="text-sm font-medium px-4 py-2 rounded-full hover:scale-105"
+                                style="color: var(--text-base);">
                                 Sign up
                             </button>
                             <button
-                                class="bg-white text-black hover:bg-white/90 px-4 py-2 rounded-full hover:scale-105">
+                                class="px-4 py-2 rounded-full hover:scale-105 hover:opacity-90"
+                                style="background-color: var(--essential-base); color: var(--background-base);">
                                 Log in
                             </button>
                         </div>
                     </header>
                     <div id="main-content" class="h-full overflow-y-auto scrollbar-hide">
                         <div class="p-6">
-                            <h1 class="text-2xl font-bold text-white">Good afternoon</h1>
+                            <h1 class="text-2xl font-bold" style="color: var(--text-primary);">Good afternoon</h1>
                             <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
                                 <!-- Top Playlist 1 -->
                                 <div
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="liked-songs">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
                                         <img src="images/ab67706f00000002db51470ffe92dddd624dab8e.jpeg"
                                             alt="Liked Songs" class="object-cover h-full w-full">
                                     </div>
@@ -641,7 +887,7 @@
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="discover-weekly">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
                                         <img src="images/ab67706f00000002bbcbed9525de853449ebd028.jpeg"
                                             alt="Discover Weekly" class="object-cover h-full w-full">
                                     </div>
@@ -658,7 +904,7 @@
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="daily-mix-1">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
                                         <img src="images/ab67706f000000029528f6707bdd37467b98824a.jpeg"
                                             alt="Daily Mix 1" class="object-cover h-full w-full">
                                     </div>
@@ -675,7 +921,7 @@
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="chill-hits">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
                                         <img src="images/ab67706f00000002e863ce9df6955fed82d56257.jpeg" alt="Chill Hits"
                                             class="object-cover h-full w-full">
                                     </div>
@@ -692,7 +938,7 @@
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="rock-classics">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
                                         <img src="images/ab67706f00000002a1b8f967c83f8a234ab92444.jpeg"
                                             alt="Rock Classics" class="object-cover h-full w-full">
                                     </div>
@@ -709,8 +955,8 @@
                                     class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
                                     data-playlist-id="hip-hop-mix">
                                     <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f000000026404721c1943d5069f0805f3.jpeg"
+                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
+                                        <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
                                             alt="Hip Hop Mix" class="object-cover h-full w-full">
                                     </div>
                                     <span class="text-sm font-medium text-white">Hip Hop Mix</span>
@@ -725,8 +971,8 @@
 
                             <!-- It's New Music Friday Section -->
                             <div class="section-header mt-8">
-                                <h2 class="text-2xl font-bold text-white">It's New Music Friday!</h2>
-                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                                <h2 class="section-title">It's New Music Friday!</h2>
+                                <a href="#" class="section-link">Show all</a>
                             </div>
                             <div class="carousel-container">
                                 <button class="carousel-nav-button carousel-nav-prev" data-carousel="new-music-friday">
@@ -736,14 +982,17 @@
                                     <!-- New Music Friday -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden transition-colors cursor-pointer"
+                                            style="background-color: var(--background-card);"
+                                            onmouseover="this.style.backgroundColor = 'var(--background-card-hover)';"
+                                            onmouseout="this.style.backgroundColor = 'var(--background-card)';">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
                                                     alt="New Music Friday India" class="h-44 w-full object-cover">
                                                 <div
                                                     class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
                                                     <button
-                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        class="h-12 w-12 play-btn">
                                                         <i data-lucide="play" class="h-6 w-6 fill-current"></i>
                                                     </button>
                                                 </div>
@@ -888,8 +1137,7 @@
                                 <div class="carousel scrollbar-hide" id="made-for-you-carousel">
                                     <!-- Daily Mix 1 -->
                                     <div class="carousel-item w-44">
-                                        <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                        <div class="group carousel-card">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
                                                     alt="Daily Mix 1" class="h-44 w-full object-cover">
@@ -902,8 +1150,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Daily Mix 1</h3>
-                                                <p class="mt-1 text-sm text-white/70">Yo Yo Honey Singh, Guru Randhawa
+                                                <h3 class="carousel-title">Daily Mix 1</h3>
+                                                <p class="carousel-subtitle">Yo Yo Honey Singh, Guru Randhawa
                                                     and more</p>
                                             </div>
                                         </div>
@@ -1153,65 +1401,420 @@
                                     <i data-lucide="chevron-right" class="h-5 w-5"></i>
                                 </button>
                             </div>
+
+                            <!-- New Artists to Follow Section (Using the new images) -->
+                            <div class="section-header mt-8">
+                                <h2 class="text-2xl font-bold text-white">New Artists to Follow</h2>
+                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                            </div>
+                            <div class="carousel-container">
+                                <button class="carousel-nav-button carousel-nav-prev" data-carousel="new-artists">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <div class="carousel scrollbar-hide" id="new-artists-carousel">
+                                    <!-- Artist 1 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab676161000051745ba2d75eb08a2d672f9b69b7.jpg"
+                                                    alt="AR Rahman" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">AR Rahman</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 2 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab6761610000517490b6c3d093f9b02aad628eaf.jpg"
+                                                    alt="Arijit Singh" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Arijit Singh</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 3 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab676161000051749415df28058107b5d54f9fad.jpg"
+                                                    alt="Pritam" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Pritam</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 4 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e0225202a8c5fd594b8e8ee2d5e.jpg"
+                                                    alt="Shreya Ghoshal" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Shreya Ghoshal</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 5 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616100005174b19af0ea736c6228d6eb539c.jpg"
+                                                    alt="Badshah" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Badshah</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 6 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e024c81f86297c2e3fac6a4c6cd.jpg"
+                                                    alt="Neha Kakkar" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Neha Kakkar</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 7 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab676161000051748de0e6e7e55d7773931ab7f4.jpg"
+                                                    alt="Jubin Nautiyal" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Jubin Nautiyal</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Artist 8 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e02a5183fa4b99bcec1f506418d.jpg"
+                                                    alt="Darshan Raval" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Darshan Raval</h3>
+                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav-button carousel-nav-next" data-carousel="new-artists">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Trending Now Section (Using more new images) -->
+                            <div class="section-header mt-8">
+                                <h2 class="text-2xl font-bold text-white">Trending Now</h2>
+                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                            </div>
+                            <div class="carousel-container">
+                                <button class="carousel-nav-button carousel-nav-prev" data-carousel="trending-now">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <div class="carousel scrollbar-hide" id="trending-now-carousel">
+                                    <!-- Trending 1 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e02931b61b7382db17ed15e75fc.jpg"
+                                                    alt="Top Hits India" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Top Hits India</h3>
+                                                <p class="mt-1 text-sm text-white/70">Hottest tracks in India right now
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trending 2 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e0283141000ee8ce3b893a0b425.jpg"
+                                                    alt="Viral Hits" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Viral Hits</h3>
+                                                <p class="mt-1 text-sm text-white/70">Tracks going viral right now</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trending 3 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e0293145000ee8ce3b893a0b425.jpg"
+                                                    alt="Party Mix" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Party Mix</h3>
+                                                <p class="mt-1 text-sm text-white/70">Best party anthems for your night
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trending 4 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e02c60d50433ca011cd40e62f25.jpg"
+                                                    alt="Bollywood Dance" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Bollywood Dance</h3>
+                                                <p class="mt-1 text-sm text-white/70">High-energy Bollywood dance tracks
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trending 5 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/ab67616d00001e02a9b2413400021a9912bdab1f6.jpg"
+                                                    alt="Global Top 50" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Global Top 50</h3>
+                                                <p class="mt-1 text-sm text-white/70">Top 50 songs globally</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trending 6 -->
+                                    <div class="carousel-item w-44">
+                                        <div
+                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            <div class="relative">
+                                                <img src="images/region_global_default.jpg"
+                                                    alt="Chart Topper" class="h-44 w-full object-cover">
+                                                <div
+                                                    class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                    <button
+                                                        class="h-12 w-12 rounded-full bg-[#1db954] text-black shadow-md hover:bg-[#1ed760] flex items-center justify-center">
+                                                        <i data-lucide="play" class="h-6 w-6 fill-current"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h3 class="text-base font-bold text-white">Chart Toppers</h3>
+                                                <p class="mt-1 text-sm text-white/70">Biggest hits on the charts</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav-button carousel-nav-next" data-carousel="trending-now">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Now Playing - Spans full width -->
-            <div class="col-span-2 border-t border-[#292929] bg-[#181818] p-4">
+            <div class="col-span-2 p-4"
+                style="background-color: var(--background-card); border-top: 1px solid var(--border-color);">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <div class="relative h-14 w-14 overflow-hidden rounded-md bg-[#333333] flex-shrink-0">
+                        <div class="relative h-14 w-14 overflow-hidden rounded-md flex-shrink-0"
+                            style="background-color: var(--background-elevated-base);">
                             <img src="images/ab67616d00001e026404721c1943d5069f0805f3.jpeg" alt="Now playing"
                                 class="object-cover h-full w-full">
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-white">Starboy</h4>
-                            <p class="text-xs text-white/70">The Weeknd</p>
+                            <h4 class="text-sm font-medium" style="color: var(--text-base);">Starboy</h4>
+                            <p class="text-xs" style="color: var(--text-secondary);">The Weeknd</p>
                         </div>
-                        <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                        <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            style="color: var(--text-secondary);">
                             <i data-lucide="heart" class="h-4 w-4"></i>
                         </button>
                     </div>
                     <div class="flex flex-col items-center gap-2 max-w-md w-full">
                         <div class="flex items-center gap-4">
-                            <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                                style="color: var(--text-secondary);">
                                 <i data-lucide="shuffle" class="h-4 w-4"></i>
                             </button>
-                            <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                                style="color: var(--text-secondary);">
                                 <i data-lucide="skip-back" class="h-4 w-4"></i>
                             </button>
                             <button
-                                class="h-8 w-8 rounded-full bg-white text-black hover:bg-white/90 flex items-center justify-center">
+                                class="h-8 w-8 rounded-full flex items-center justify-center hover:opacity-90"
+                                style="background-color: var(--essential-base); color: var(--background-base);">
                                 <i data-lucide="play" class="h-4 w-4 fill-current"></i>
                             </button>
-                            <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                                style="color: var(--text-secondary);">
                                 <i data-lucide="skip-forward" class="h-4 w-4"></i>
                             </button>
-                            <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                                style="color: var(--text-secondary);">
                                 <i data-lucide="repeat" class="h-4 w-4"></i>
                             </button>
                         </div>
                         <div class="flex w-full items-center gap-2">
-                            <span class="text-xs text-white/70">1:23</span>
-                            <div class="relative w-full h-1 bg-white/20 rounded-full cursor-pointer group">
-                                <div class="absolute h-full w-[30%] bg-white rounded-full"></div>
+                            <span class="text-xs" style="color: var(--text-secondary);">1:23</span>
+                            <div class="relative w-full h-1 rounded-full cursor-pointer group"
+                                style="background-color: var(--background-tinted-base);">
+                                <div class="absolute h-full w-[30%] rounded-full"
+                                    style="background-color: var(--essential-base);"></div>
                                 <div
-                                    class="absolute h-3 w-3 bg-white rounded-full -translate-y-1/3 left-[30%] opacity-0 group-hover:opacity-100">
+                                    class="absolute h-3 w-3 rounded-full -translate-y-1/3 left-[30%] opacity-0 group-hover:opacity-100"
+                                    style="background-color: var(--essential-base);">
                                 </div>
                             </div>
-                            <span class="text-xs text-white/70">3:45</span>
+                            <span class="text-xs" style="color: var(--text-secondary);">3:45</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                        <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            style="color: var(--text-secondary);">
                             <i data-lucide="mic-2" class="h-4 w-4"></i>
                         </button>
-                        <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                        <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            style="color: var(--text-secondary);">
                             <i data-lucide="list-music" class="h-4 w-4"></i>
                         </button>
-                        <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                        <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            style="color: var(--text-secondary);">
                             <i data-lucide="laptop-2" class="h-4 w-4"></i>
                         </button>
                         <div class="flex items-center gap-2">
@@ -1241,14 +1844,25 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const carouselNavButtons = document.querySelectorAll('.carousel-nav-button');
 
+                // Initialize all carousels
+                const carousels = {
+                    'new-music-friday': document.getElementById('new-music-friday-carousel'),
+                    'made-for-you': document.getElementById('made-for-you-carousel'),
+                    'popular-albums': document.getElementById('popular-albums-carousel'),
+                    'new-artists': document.getElementById('new-artists-carousel'),
+                    'trending-now': document.getElementById('trending-now-carousel')
+                };
+
                 carouselNavButtons.forEach(button => {
                     button.addEventListener('click', function () {
                         const carouselId = this.getAttribute('data-carousel');
                         const direction = this.classList.contains('carousel-nav-prev') ? -1 : 1;
-                        const carousel = document.getElementById(`${carouselId}-carousel`);
+                        const carousel = carousels[carouselId];
 
-                        const scrollAmount = direction * carousel.offsetWidth * 0.8;
-                        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        if (carousel) {
+                            const scrollAmount = direction * carousel.offsetWidth * 0.8;
+                            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        }
                     });
                 });
 
@@ -1277,6 +1891,53 @@
                     }
                     lucide.createIcons(); // Recreate icons to update the toggle icon
                 });
+
+                // Theme toggle functionality
+                const themeToggle = document.getElementById('theme-toggle');
+                const body = document.body;
+                const sunIcon = document.querySelector('.dark-mode-only');
+                const moonIcon = document.querySelector('.light-mode-only');
+
+                // Initialize theme
+                function initializeTheme() {
+                    // Check for saved theme preference or use default
+                    const savedTheme = localStorage.getItem('theme') || 'dark';
+
+                    // Set the theme on the body
+                    body.setAttribute('data-theme', savedTheme);
+
+                    // Update icon visibility based on current theme
+                    updateThemeIcons(savedTheme);
+                }
+
+                // Toggle theme on button click
+                themeToggle.addEventListener('click', function () {
+                    const currentTheme = body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                    // Update theme
+                    body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+
+                    // Update icons
+                    updateThemeIcons(newTheme);
+
+                    console.log('Theme changed to:', newTheme); // Debug log
+                });
+
+                // Helper function to update icon visibility
+                function updateThemeIcons(theme) {
+                    if (theme === 'dark') {
+                        sunIcon.classList.remove('hidden');
+                        moonIcon.classList.add('hidden');
+                    } else {
+                        sunIcon.classList.add('hidden');
+                        moonIcon.classList.remove('hidden');
+                    }
+                }
+
+                // Initialize the theme when DOM is loaded
+                initializeTheme();
             });
         </script>
     </body>
