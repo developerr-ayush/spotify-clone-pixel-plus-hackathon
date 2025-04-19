@@ -13,40 +13,58 @@
                 theme: {
                     extend: {
                         colors: {
+                            // Core semantic colors with CSS variables
                             "background-base": "var(--background-base)",
                             "background-card": "var(--background-card)",
                             "background-card-hover": "var(--background-card-hover)",
-                            "text-primary": "var(--text-primary)",
-                            "text-subdued": "var(--text-subdued)",
-                            "brand-color": "var(--brand-color)",
-                            "gradient-start": "var(--gradient-start)",
                             "background-elevated-base": "var(--background-elevated-base)",
-                            "background-page": "var(--background-page)",
-                            "background-base": "var(--background-base)",
-                            "background-card": "var(--background-card)",
-                            "background-card-hover": "var(--background-card-hover)",
-                            "text-primary": "var(--text-primary)",
-                            "text-subdued": "var(--text-subdued)",
-                            "brand-color": "var(--brand-color)",
-                            "border-color": "var(--border-color)",
                             "background-highlight": "var(--background-highlight)",
-                            "background-elevated-base": "var(--background-elevated-base)",
-                            "background-tinted-base": "var(--background-tinted-base)",
-                            "essential-base": "var(--essential-base)",
-                            "text-base": "var(--text-base)",
-                            "text-secondary": "var(--text-secondary)",
-                            "gradient-start": "var(--gradient-start)",
                             "background-page": "var(--background-page)",
-                            "background-elevated-base": "var(--background-elevated-base)",
+                            "background-tinted-base": "var(--background-tinted-base)",
+                            "border-color": "var(--border-color)",
+                            "brand-color": "var(--brand-color)",
+                            "essential-base": "var(--essential-base)",
+                            "gradient-start": "var(--gradient-start)",
+                            "text-base": "var(--text-base)",
+                            "text-primary": "var(--text-primary)",
+                            "text-secondary": "var(--text-secondary)",
+                            "text-subdued": "var(--text-subdued)",
 
+                            // Named color palette with opacity support
+                            primary: {
+                                DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+                                50: 'rgb(var(--color-primary-50) / <alpha-value>)',
+                                100: 'rgb(var(--color-primary-100) / <alpha-value>)',
+                                200: 'rgb(var(--color-primary-200) / <alpha-value>)',
+                                300: 'rgb(var(--color-primary-300) / <alpha-value>)',
+                                400: 'rgb(var(--color-primary-400) / <alpha-value>)',
+                                500: 'rgb(var(--color-primary-500) / <alpha-value>)',
+                                600: 'rgb(var(--color-primary-600) / <alpha-value>)',
+                                700: 'rgb(var(--color-primary-700) / <alpha-value>)',
+                                800: 'rgb(var(--color-primary-800) / <alpha-value>)',
+                                900: 'rgb(var(--color-primary-900) / <alpha-value>)',
+                            },
+                            neutral: {
+                                DEFAULT: 'rgb(var(--color-neutral) / <alpha-value>)',
+                                50: 'rgb(var(--color-neutral-50) / <alpha-value>)',
+                                100: 'rgb(var(--color-neutral-100) / <alpha-value>)',
+                                200: 'rgb(var(--color-neutral-200) / <alpha-value>)',
+                                300: 'rgb(var(--color-neutral-300) / <alpha-value>)',
+                                400: 'rgb(var(--color-neutral-400) / <alpha-value>)',
+                                500: 'rgb(var(--color-neutral-500) / <alpha-value>)',
+                                600: 'rgb(var(--color-neutral-600) / <alpha-value>)',
+                                700: 'rgb(var(--color-neutral-700) / <alpha-value>)',
+                                800: 'rgb(var(--color-neutral-800) / <alpha-value>)',
+                                900: 'rgb(var(--color-neutral-900) / <alpha-value>)',
+                            },
                             spotify: {
-                                green: '#1DB954',
-                                greenHover: '#1ED760',
-                                black: '#121212',
-                                darkgray: '#181818',
-                                lightgray: '#282828',
-                                border: '#292929',
-                                highlight: '#242424'
+                                green: 'rgb(29 185 84 / <alpha-value>)',
+                                greenHover: 'rgb(30 215 96 / <alpha-value>)',
+                                black: 'rgb(18 18 18 / <alpha-value>)',
+                                darkgray: 'rgb(24 24 24 / <alpha-value>)',
+                                lightgray: 'rgb(40 40 40 / <alpha-value>)',
+                                border: 'rgb(41 41 41 / <alpha-value>)',
+                                highlight: 'rgb(36 36 36 / <alpha-value>)'
                             }
                         }
                     }
@@ -55,55 +73,96 @@
         </script>
         <style>
             :root {
-                --background-base: #121212;
-                --background-card: #181818;
-                --background-card-hover: #282828;
-                --text-primary: #ffffff;
-                --text-subdued: #a7a7a7;
-                --brand-color: #1ed760;
+                /* Base theme colors (RGB format for opacity support) */
+                --color-primary: 29 185 84;
+                /* Spotify green */
+                --color-primary-50: 232 249 238;
+                --color-primary-100: 204 243 219;
+                --color-primary-200: 153 231 183;
+                --color-primary-300: 102 219 148;
+                --color-primary-400: 51 207 113;
+                --color-primary-500: 29 185 84;
+                /* Default spotify green */
+                --color-primary-600: 23 148 67;
+                --color-primary-700: 17 111 50;
+                --color-primary-800: 12 74 34;
+                --color-primary-900: 6 37 17;
+                --color-neutral: 167 167 167;
+                /* Base neutral color */
+                --color-neutral-50: 249 249 249;
+                --color-neutral-100: 242 242 242;
+                --color-neutral-200: 229 229 229;
+                --color-neutral-300: 212 212 212;
+                --color-neutral-400: 190 190 190;
+                --color-neutral-500: 167 167 167;
+                /* Default neutral */
+                --color-neutral-600: 130 130 130;
+                --color-neutral-700: 97 97 97;
+                --color-neutral-800: 65 65 65;
+                --color-neutral-900: 32 32 32;
+                /* Semantic variables (using the color system) */
+                --background-base: rgb(18 18 18);
+                --background-card: rgb(24 24 24);
+                --background-card-hover: rgb(40 40 40);
+                --text-primary: rgb(255 255 255);
+                --text-subdued: rgb(167 167 167);
+                --brand-color: rgb(29 185 84);
                 --sidebar-width: 280px;
                 --topbar-height: 64px;
                 --now-playing-height: 90px;
-                --gradient-start: #533051;
-                --background-page: #000;
-                --background-elevated-base: #1f1f1f;
+                --gradient-start: rgb(83 48 81);
+                --background-page: rgb(0 0 0);
+                --background-elevated-base: rgb(31 31 31);
+                --border-color: rgb(41 41 41);
+                --background-highlight: rgb(36 36 36);
+                --background-tinted-base: rgb(42 42 42);
+                --essential-base: rgb(29 185 84);
+                --text-base: rgb(255 255 255);
+                --text-secondary: rgb(167 167 167);
             }
 
             /* Light theme variables */
             body[data-theme="light"] {
-                --background-base: #f2f2f2;
-                --background-card: #f0f0f0;
-                --background-card-hover: #e0e0e0;
-                --text-primary: #121212;
-                --text-subdued: #606060;
-                --brand-color: #1db954;
-                --border-color: #e0e0e0;
-                --background-highlight: #f7f7f7;
-                --background-elevated-base: #e6e6e6;
-                --background-tinted-base: #d3d3d3;
-                --essential-base: #1db954;
-                --text-base: #121212;
-                --text-secondary: #606060;
-                --gradient-start: #9c87a0;
-                --background-page: #fff;
-                --bg-gradient-start: rgba(0, 0, 0, .1);
-                --bg-gradient-end: rgba(0, 0, 0, 0);
-                --background-elevated-base: #eaeaea;
+                /* Light theme semantic colors */
+                --background-base: rgb(242 242 242);
+                --background-card: rgb(240 240 240);
+                --background-card-hover: rgb(224 224 224);
+                --text-primary: rgb(18 18 18);
+                --text-subdued: rgb(96 96 96);
+                --brand-color: rgb(29 185 84);
+                --border-color: rgb(224 224 224);
+                --background-highlight: rgb(247 247 247);
+                --background-elevated-base: rgb(230 230 230);
+                --background-tinted-base: rgb(211 211 211);
+                --essential-base: rgb(29 185 84);
+                --text-base: rgb(18 18 18);
+                --text-secondary: rgb(96 96 96);
+                --gradient-start: rgb(156 135 160);
+                --background-page: rgb(255 255 255);
+                --bg-gradient-start: rgb(0 0 0 / 0.1);
+                --bg-gradient-end: rgb(0 0 0 / 0);
             }
 
-            /* Dark theme variables - adding extra variables that are used but not defined in :root */
+            /* Dark theme variables */
             body[data-theme="dark"] {
-                --border-color: #292929;
-                --background-highlight: #1a1a1a;
-                --background-elevated-base: #333333;
-                --background-tinted-base: #2a2a2a;
-                --essential-base: #1db954;
-                --text-base: #ffffff;
-                --text-secondary: #a7a7a7;
-                --gradient-start: #533051;
-                --background-elevated-base: #1f1f1f;
-                --bg-gradient-start: rgba(255, 255, 255, .1);
-                --bg-gradient-end: rgba(255, 255, 255, 0);
+                /* Dark theme semantic colors */
+                --background-base: rgb(18 18 18);
+                --background-card: rgb(24 24 24);
+                --background-card-hover: rgb(40 40 40);
+                --text-primary: rgb(255 255 255);
+                --text-subdued: rgb(167 167 167);
+                --brand-color: rgb(29 185 84);
+                --border-color: rgb(41 41 41);
+                --background-highlight: rgb(26 26 26);
+                --background-elevated-base: rgb(51 51 51);
+                --background-tinted-base: rgb(42 42 42);
+                --essential-base: rgb(29 185 84);
+                --text-base: rgb(255 255 255);
+                --text-secondary: rgb(167 167 167);
+                --gradient-start: rgb(83 48 81);
+                --background-page: rgb(0 0 0);
+                --bg-gradient-start: rgb(255 255 255 / 0.1);
+                --bg-gradient-end: rgb(255 255 255 / 0);
             }
 
             /* Added hover styles for sidebar elements */
@@ -1723,7 +1782,7 @@
                                         <div
                                             class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
-                                                <img src="images/region_global_default.jpg"
+                                                <img src="images/ab67616d00001e02c60d50433ca011cd40e62f25.jpg"
                                                     alt="Chart Topper" class="h-44 w-full object-cover">
                                                 <div
                                                     class="absolute bottom-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
