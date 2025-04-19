@@ -19,7 +19,8 @@
                                 black: '#121212',
                                 darkgray: '#181818',
                                 lightgray: '#282828',
-                                border: '#292929'
+                                border: '#292929',
+                                highlight: '#242424'
                             }
                         }
                     }
@@ -43,7 +44,7 @@
 
             /* Light theme variables */
             body[data-theme="light"] {
-                --background-base: #ffffff;
+                --background-base: #f2f2f2;
                 --background-card: #f0f0f0;
                 --background-card-hover: #e0e0e0;
                 --text-primary: #121212;
@@ -459,11 +460,13 @@
             .carousel-container {
                 position: relative;
             }
-            .carousel-container:not(:hover){
-                .carousel-nav-button{
+
+            .carousel-container:not(:hover) {
+                .carousel-nav-button {
                     opacity: 0;
                 }
             }
+
             .carousel {
                 display: flex;
                 gap: 24px;
@@ -622,7 +625,6 @@
                 cursor: pointer;
             }
 
-
             .carousel-title {
                 color: var(--text-primary);
                 font-size: 1rem;
@@ -656,7 +658,7 @@
     <body class="h-screen overflow-hidden" data-theme="dark">
 
         <div class="grid h-full grid-rows-[80px_1fr_80px] gap-2" style="grid-template-columns: auto 1fr;">
-            <header class="col-span-2 flex items-center justify-between p-4"
+            <header class="col-span-2 flex items-center justify-between p-4">
                 <!-- Left section with navigation controls -->
                 <div class="flex items-center gap-4">
                     <!-- Spotify Logo -->
@@ -669,45 +671,59 @@
                                 transform="translate(-0.95,0)" fill="var(--text-base)"></path>
                         </svg></a>
 
-                    <!-- Home and Search buttons -->
-                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-full"
-                        style="background-color: var(--background-base);">
-                        <i data-lucide="home" class="h-5 w-5" style="color: var(--text-base);"></i>
-                        <span class="font-bold" style="color: var(--text-base);">Home</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-full text-white/70 hover:text-white">
-                        <i data-lucide="search" class="h-5 w-5"></i>
-                        <span class="font-bold">Search</span>
-                    </a>
                 </div>
 
-                <!-- Search bar (center) -->
-                <div class="flex-1 max-w-md mx-8">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="search" class="h-4 w-4 text-gray-400"></i>
+                <!-- Search bar (center) - aligned exactly as in screenshot -->
+                <div class="flex gap-2">
+                    <!-- Home icon -->
+                    <a href="#" class="p-2 w-4 h-4 rounded-full">
+                        <a href="#" class="flex items-center gap-2 px-3 py-1.5 rounded-full ">
+                            <i data-lucide="home" class="h-5 w-5 text-base"></i>
+                        </a>
+                    </a>
+
+                    <!-- Search bar -->
+                    <div class="flex-1 mx-4">
+                        <div class="relative flex items-center">
+                            <div class="absolute left-3 text-base">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--text-base)">
+                                    <path
+                                        d="M10.533 1.279c-5.18 0-9.407 4.14-9.407 9.279s4.226 9.279 9.407 9.279c2.234 0 4.29-.77 5.907-2.058l4.353 4.353a1 1 0 1 0 1.414-1.414l-4.344-4.344a9.157 9.157 0 0 0 2.077-5.816c0-5.14-4.226-9.28-9.407-9.28zm-7.407 9.279c0-4.006 3.302-7.28 7.407-7.28s7.407 3.274 7.407 7.28-3.302 7.279-7.407 7.279-7.407-3.273-7.407-7.28z"
+                                        fill="var(--text-base)">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input type="text" placeholder="What do you want to play?"
+                                class="py-2 pl-10 pr-12  text-base w-full rounded-full border-none focus:outline-none " style="background-color: var(--background-base);" />
+                            <div class="w-px bg-background-base absolute right-[40px] bg-background-base h-6"></div>
+                            <div class="absolute right-2 text-base w-6 h-6">
+                                <svg data-encore-id="icon" role="img" aria-hidden="true"
+                                    fill="var(--text-base)"
+                                    class="e-9812-icon e-9812-baseline " viewBox="0 0 24 24">
+                                    <path d="M15 15.5c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"></path>
+                                    <path
+                                        d="M1.513 9.37A1 1 0 0 1 2.291 9h19.418a1 1 0 0 1 .979 1.208l-2.339 11a1 1 0 0 1-.978.792H4.63a1 1 0 0 1-.978-.792l-2.339-11a1 1 0 0 1 .201-.837zM3.525 11l1.913 9h13.123l1.913-9H3.525zM4 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v4h-2V3H6v3H4V2z"
+                                        fill="var(--text-base)"
+                                        stroke="var(--text-base)">
+                                    </path>
+                                </svg>
+                            </div>
                         </div>
-                        <input type="text" placeholder="What do you want to play?"
-                            class="py-2 pl-10 pr-4 block w-full rounded-full text-sm"
-                            style="background-color: var(--background-elevated-base); color: var(--text-base);">
                     </div>
                 </div>
 
                 <!-- Right buttons -->
-                <div class="flex items-center gap-2">
-                    <button class="font-bold px-4 py-2 rounded-full text-sm" style="color: var(--text-base);">
+                <div class="flex items-center gap-3">
+                    <a href="#" class="font-bold text-sm text-base">
                         Explore Premium
-                    </button>
-                    <button class="font-bold px-4 py-2 rounded-full text-sm flex items-center gap-1"
-                        style="color: var(--text-base);">
+                    </a>
+                    <a href="#" class="font-bold text-sm flex items-center gap-1.5 text-base">
                         <i data-lucide="download" class="h-4 w-4"></i>
                         Install App
-                    </button>
-                    <button id="theme-toggle" class="theme-toggle h-8 w-8 rounded-full flex items-center justify-center"
-                        style="background-color: var(--background-tinted-base); color: var(--text-base);"
-                        aria-label="Toggle theme">
-                        <i data-lucide="sun" class="h-5 w-5 dark-mode-only"></i>
-                        <i data-lucide="moon" class="h-5 w-5 light-mode-only hidden"></i>
+                    </a>
+                    <button id="theme-toggle" class="h-8 w-8 rounded-full flex items-center justify-center"
+                        style="background-color: var(--background-base);">
+                        <i data-lucide="sun" class="h-5 w-5 text-base"></i>
                     </button>
                     <button class="h-8 w-8 rounded-full flex items-center justify-center bg-gray-300">
                         <i data-lucide="user" class="h-5 w-5 text-gray-700"></i>
