@@ -38,6 +38,7 @@
                 --topbar-height: 64px;
                 --now-playing-height: 90px;
                 --gradient-start: #533051;
+                --background-page: #000;
             }
 
             /* Light theme variables */
@@ -56,6 +57,9 @@
                 --text-base: #121212;
                 --text-secondary: #606060;
                 --gradient-start: #9c87a0;
+                --background-page: #fff;
+                --bg-gradient-start: rgba(0, 0, 0, .1);
+                --bg-gradient-end: rgba(0, 0, 0, 0);
             }
 
             /* Dark theme variables - adding extra variables that are used but not defined in :root */
@@ -68,11 +72,53 @@
                 --text-base: #ffffff;
                 --text-secondary: #a7a7a7;
                 --gradient-start: #533051;
+                --bg-gradient-start: rgba(255, 255, 255, .1);
+                --bg-gradient-end: rgba(255, 255, 255, 0);
             }
 
+            /* Added hover styles for sidebar elements */
+            .sidebar-button {
+                background-color: transparent;
+            }
+
+            .sidebar-button:hover {
+                background-color: var(--background-tinted-base);
+            }
+
+            .filter-button {
+                background-color: var(--background-elevated-base);
+                color: var(--text-base);
+            }
+
+            .filter-button:hover {
+                background-color: var(--background-tinted-base);
+            }
+
+            /* Library item styles */
+            .library-item {
+                color: var(--text-base);
+                border-radius: 0.375rem;
+                padding: 0.5rem;
+                cursor: pointer;
+            }
+
+            .library-item:hover {
+                background-color: var(--background-tinted-base);
+            }
+
+            .library-item .title {
+                color: var(--text-base);
+                font-weight: 700;
+            }
+
+            .library-item .subtitle {
+                color: var(--text-subdued);
+            }
+
+            /* Rest of existing styles */
             body {
                 font-family: 'Circular Std', Arial, sans-serif;
-                background-color: var(--background-base);
+                background-color: var(--background-page);
                 color: var(--text-primary);
                 margin: 0;
                 padding: 0;
@@ -116,7 +162,7 @@
 
             .sidebar {
                 width: var(--sidebar-width);
-                background-color: var(--background-highlight);
+                background-color: var(--background-base);
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
@@ -413,7 +459,11 @@
             .carousel-container {
                 position: relative;
             }
-
+            .carousel-container:not(:hover){
+                .carousel-nav-button{
+                    opacity: 0;
+                }
+            }
             .carousel {
                 display: flex;
                 gap: 24px;
@@ -441,6 +491,7 @@
                 z-index: 5;
                 border: none;
                 color: white;
+                transition: opacity 0.2s;
             }
 
             .carousel-nav-prev {
@@ -565,16 +616,12 @@
 
             /* Custom class for themed carousel items */
             .carousel-card {
-                background-color: var(--background-card);
                 transition: background-color 0.2s;
                 border-radius: 0.5rem;
                 overflow: hidden;
                 cursor: pointer;
             }
 
-            .carousel-card:hover {
-                background-color: var(--background-card-hover);
-            }
 
             .carousel-title {
                 color: var(--text-primary);
@@ -607,110 +654,151 @@
     </head>
 
     <body class="h-screen overflow-hidden" data-theme="dark">
-        <div class="grid h-full grid-rows-[1fr_80px]" style="grid-template-columns: auto 1fr;">
-            <!-- Sidebar -->
-            <div id="sidebar" class="sidebar flex flex-col bg-black p-2 overflow-hidden" style="width: 300px;">
-                <!-- Home and Search buttons -->
-                <div class="rounded-md p-2 mb-2 bg-[#121212]">
-                    <div class="flex flex-col gap-4 px-2">
-                        <button
-                            class="flex items-center justify-start gap-4 hover:opacity-80 w-full text-left py-1 rounded-md">
-                            <i data-lucide="home" class="h-6 w-6 text-white"></i>
-                            <span class="font-bold text-white">Home</span>
-                        </button>
-                        <button
-                            class="flex items-center justify-start gap-4 hover:opacity-80 w-full text-left py-1 rounded-md">
-                            <i data-lucide="search" class="h-6 w-6 text-white"></i>
-                            <span class="font-bold text-white">Search</span>
-                        </button>
+
+        <div class="grid h-full grid-rows-[80px_1fr_80px] gap-2" style="grid-template-columns: auto 1fr;">
+            <header class="col-span-2 flex items-center justify-between p-4"
+                <!-- Left section with navigation controls -->
+                <div class="flex items-center gap-4">
+                    <!-- Spotify Logo -->
+                    <a class="text-base" href="/"><svg role="img" viewBox="0 0 24 24"
+                            class="e-9812-logo e-9812-baseline "
+                            aria-label="Spotify" aria-hidden="false" height="32" data-encore-id="logoSpotify">
+                            <title>Spotify</title>
+                            <path
+                                d="M13.427.01C6.805-.253 1.224 4.902.961 11.524.698 18.147 5.853 23.728 12.476 23.99c6.622.263 12.203-4.892 12.466-11.514S20.049.272 13.427.01m5.066 17.579a.717.717 0 0 1-.977.268 14.4 14.4 0 0 0-5.138-1.747 14.4 14.4 0 0 0-5.42.263.717.717 0 0 1-.338-1.392c1.95-.474 3.955-.571 5.958-.29 2.003.282 3.903.928 5.647 1.92a.717.717 0 0 1 .268.978m1.577-3.15a.93.93 0 0 1-1.262.376 17.7 17.7 0 0 0-5.972-1.96 17.7 17.7 0 0 0-6.281.238.93.93 0 0 1-1.11-.71.93.93 0 0 1 .71-1.11 19.5 19.5 0 0 1 6.94-.262 19.5 19.5 0 0 1 6.599 2.165c.452.245.62.81.376 1.263m1.748-3.551a1.147 1.147 0 0 1-1.546.488 21.4 21.4 0 0 0-6.918-2.208 21.4 21.4 0 0 0-7.259.215 1.146 1.146 0 0 1-.456-2.246 23.7 23.7 0 0 1 8.034-.24 23.7 23.7 0 0 1 7.657 2.445c.561.292.78.984.488 1.546m13.612-.036-.832-.247c-1.67-.495-2.14-.681-2.14-1.353 0-.637.708-1.327 2.264-1.327 1.539 0 2.839.752 3.51 1.31.116.096.24.052.24-.098V6.935c0-.097-.027-.15-.098-.203-.83-.62-2.272-1.07-3.723-1.07-2.953 0-4.722 1.68-4.722 3.59 0 2.157 1.371 2.91 3.626 3.546l.973.274c1.689.478 1.998.902 1.998 1.556 0 1.097-.831 1.433-2.07 1.433-1.556 0-3.457-.911-4.35-2.025-.08-.098-.177-.053-.177.062v2.423c0 .097.01.141.08.22.743.814 2.52 1.53 4.59 1.53 2.546 0 4.456-1.485 4.456-3.784 0-1.787-1.052-2.865-3.625-3.635m10.107-1.76c-1.68 0-2.653 1.026-3.219 2.052V9.376c0-.08-.044-.124-.124-.124h-2.22c-.079 0-.123.044-.123.124V20.72c0 .08.044.124.124.124h2.22c.079 0 .123-.044.123-.124v-4.536c.566 1.025 1.521 2.034 3.237 2.034 2.264 0 3.89-1.955 3.89-4.581s-1.644-4.545-3.908-4.545m-.654 6.986c-1.185 0-2.211-1.167-2.618-2.458.407-1.362 1.344-2.405 2.618-2.405 1.211 0 2.051.92 2.051 2.423s-.84 2.44-2.051 2.44m40.633-6.826h-2.264c-.08 0-.115.017-.15.097l-2.282 5.483-2.29-5.483c-.035-.08-.07-.097-.15-.097h-3.661v-.584c0-.955.645-1.397 1.476-1.397.496 0 1.035.256 1.415.486.089.053.15-.008.115-.088l-.796-1.901a.26.26 0 0 0-.124-.133c-.389-.203-1.025-.38-1.644-.38-1.875 0-2.954 1.432-2.954 3.254v.743h-1.503c-.08 0-.124.044-.124.124v1.768c0 .08.044.124.124.124h1.503v6.668c0 .08.044.123.124.123h2.264c.08 0 .124-.044.124-.123v-6.668h1.936l2.812 6.11-1.512 3.325c-.044.098.009.142.097.142h2.414c.08 0 .116-.018.15-.097l4.997-11.355c.035-.08-.009-.141-.097-.141M54.964 9.04c-2.865 0-4.837 2.025-4.837 4.616 0 2.573 1.971 4.616 4.837 4.616 2.856 0 4.846-2.043 4.846-4.616 0-2.591-1.99-4.616-4.846-4.616m.008 7.065c-1.37 0-2.343-1.043-2.343-2.45 0-1.405.973-2.449 2.343-2.449 1.362 0 2.335 1.043 2.335 2.45 0 1.406-.973 2.45-2.335 2.45m33.541-6.334a1.24 1.24 0 0 0-.483-.471 1.4 1.4 0 0 0-.693-.17q-.384 0-.693.17a1.24 1.24 0 0 0-.484.471q-.174.302-.174.681 0 .375.174.677.175.3.484.471t.693.17.693-.17.483-.471.175-.676q0-.38-.175-.682m-.211 1.247a1 1 0 0 1-.394.39 1.15 1.15 0 0 1-.571.14 1.16 1.16 0 0 1-.576-.14 1 1 0 0 1-.391-.39 1.14 1.14 0 0 1-.14-.566q0-.316.14-.562t.391-.388.576-.14q.32 0 .57.14.253.141.395.39t.142.565q0 .312-.142.56m-19.835-5.78c-.85 0-1.468.6-1.468 1.396s.619 1.397 1.468 1.397c.866 0 1.485-.6 1.485-1.397 0-.796-.619-1.397-1.485-1.397m19.329 5.19a.31.31 0 0 0 .134-.262q0-.168-.132-.266-.132-.099-.381-.099h-.588v1.229h.284v-.489h.154l.374.489h.35l-.41-.518a.5.5 0 0 0 .215-.084m-.424-.109h-.26v-.3h.27q.12 0 .184.036a.12.12 0 0 1 .065.116.12.12 0 0 1-.067.111.4.4 0 0 1-.192.037M69.607 9.252h-2.263c-.08 0-.124.044-.124.124v8.56c0 .08.044.123.124.123h2.263c.08 0 .124-.044.124-.123v-8.56c0-.08-.044-.124-.124-.124m-3.333 6.605a2.1 2.1 0 0 1-1.053.257c-.725 0-1.185-.425-1.185-1.362v-3.484h2.211c.08 0 .124-.044.124-.124V9.376c0-.08-.044-.124-.124-.124h-2.21V6.944c0-.097-.063-.15-.15-.08l-3.954 3.113c-.053.044-.07.088-.07.16v1.007c0 .08.044.124.123.124h1.539v3.855c0 2.087 1.203 3.06 2.918 3.06.743 0 1.46-.194 1.884-.442.062-.035.07-.07.07-.133v-1.68c0-.088-.044-.115-.123-.07"
+                                transform="translate(-0.95,0)" fill="var(--text-base)"></path>
+                        </svg></a>
+
+                    <!-- Home and Search buttons -->
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-full"
+                        style="background-color: var(--background-base);">
+                        <i data-lucide="home" class="h-5 w-5" style="color: var(--text-base);"></i>
+                        <span class="font-bold" style="color: var(--text-base);">Home</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-full text-white/70 hover:text-white">
+                        <i data-lucide="search" class="h-5 w-5"></i>
+                        <span class="font-bold">Search</span>
+                    </a>
+                </div>
+
+                <!-- Search bar (center) -->
+                <div class="flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="h-4 w-4 text-gray-400"></i>
+                        </div>
+                        <input type="text" placeholder="What do you want to play?"
+                            class="py-2 pl-10 pr-4 block w-full rounded-full text-sm"
+                            style="background-color: var(--background-elevated-base); color: var(--text-base);">
                     </div>
                 </div>
+
+                <!-- Right buttons -->
+                <div class="flex items-center gap-2">
+                    <button class="font-bold px-4 py-2 rounded-full text-sm" style="color: var(--text-base);">
+                        Explore Premium
+                    </button>
+                    <button class="font-bold px-4 py-2 rounded-full text-sm flex items-center gap-1"
+                        style="color: var(--text-base);">
+                        <i data-lucide="download" class="h-4 w-4"></i>
+                        Install App
+                    </button>
+                    <button id="theme-toggle" class="theme-toggle h-8 w-8 rounded-full flex items-center justify-center"
+                        style="background-color: var(--background-tinted-base); color: var(--text-base);"
+                        aria-label="Toggle theme">
+                        <i data-lucide="sun" class="h-5 w-5 dark-mode-only"></i>
+                        <i data-lucide="moon" class="h-5 w-5 light-mode-only hidden"></i>
+                    </button>
+                    <button class="h-8 w-8 rounded-full flex items-center justify-center bg-gray-300">
+                        <i data-lucide="user" class="h-5 w-5 text-gray-700"></i>
+                    </button>
+                </div>
+            </header>
+            <!-- Sidebar -->
+            <div id="sidebar" class="sidebar flex flex-col p-2 overflow-hidden rounded-xl"
+                style="width: 300px; background-color: var(--background-base);">
 
                 <div class="rounded-md p-2 flex-1 overflow-hidden flex flex-col">
                     <div class="flex items-center justify-between px-2 py-4">
                         <div class="flex items-center gap-3">
-                            <i data-lucide="library" class="h-6 w-6 text-white"></i>
-                            <span class="font-bold text-white text-base">Your Library</span>
+                            <i data-lucide="library" class="h-6 w-6" style="color: var(--text-base);"></i>
+                            <span class="font-bold text-base" style="color: var(--text-base);">Your Library</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
-                                <i data-lucide="plus" class="h-5 w-5 text-white"></i>
+                            <button class="sidebar-button h-8 w-8 rounded-full flex items-center justify-center">
+                                <i data-lucide="plus" class="h-5 w-5" style="color: var(--text-base);"></i>
                             </button>
-                            <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
-                                <i data-lucide="arrow-right" class="h-5 w-5 text-white"></i>
+                            <button class="sidebar-button h-8 w-8 rounded-full flex items-center justify-center">
+                                <i data-lucide="arrow-right" class="h-5 w-5" style="color: var(--text-base);"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Filter buttons -->
                     <div class="flex gap-2 px-2 py-2 overflow-x-auto scrollbar-hide">
-                        <button
-                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                        <button class="filter-button h-8 rounded-full px-3 py-1 text-sm font-medium min-w-max">
                             Playlists
                         </button>
-                        <button
-                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                        <button class="filter-button h-8 rounded-full px-3 py-1 text-sm font-medium min-w-max">
                             Artists
                         </button>
-                        <button
-                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                        <button class="filter-button h-8 rounded-full px-3 py-1 text-sm font-medium min-w-max">
                             Albums
                         </button>
-                        <button
-                            class="h-8 rounded-full px-3 py-1 text-sm bg-[#232323] text-white font-medium hover:bg-[#2a2a2a] min-w-max">
+                        <button class="filter-button h-8 rounded-full px-3 py-1 text-sm font-medium min-w-max">
                             Podcasts & Shows
                         </button>
                     </div>
 
                     <!-- Search and sort -->
                     <div class="flex items-center justify-between px-2 py-2">
-                        <button class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[#232323]">
-                            <i data-lucide="search" class="h-4 w-4 text-white"></i>
+                        <button class="sidebar-button h-8 w-8 rounded-full flex items-center justify-center">
+                            <i data-lucide="search" class="h-4 w-4" style="color: var(--text-base);"></i>
                         </button>
                         <div class="flex items-center gap-1">
-                            <span class="text-sm text-[#a7a7a7] font-medium">Recents</span>
-                            <i data-lucide="list" class="h-4 w-4 text-[#a7a7a7]"></i>
+                            <span class="text-sm font-medium" style="color: var(--text-subdued);">Recents</span>
+                            <i data-lucide="list" class="h-4 w-4" style="color: var(--text-subdued);"></i>
                         </div>
                     </div>
 
                     <!-- Library items -->
                     <div class="mt-2 overflow-y-auto h-full scrollbar-hide flex-1">
                         <!-- Liked Songs -->
-                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                        <div class="library-item flex items-center gap-3">
                             <div
                                 class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center">
-                                <i data-lucide="heart" class="h-6 w-6 text-white"></i>
+                                <i data-lucide="heart" class="h-6 w-6 text-base"></i>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Liked Songs</span>
+                                <span class="title text-base">Liked Songs</span>
                                 <div class="flex items-center gap-1">
                                     <i data-lucide="pin" class="h-3 w-3 text-green-500"></i>
-                                    <span class="text-sm text-[#a7a7a7]">Playlist • 345 songs</span>
+                                    <span class="subtitle text-sm">Playlist • 345 songs</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- mala + Ayush -->
-                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                        <div class="library-item flex items-center gap-3">
                             <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-red-900">
                                 <img src="images/ab67706f00000002cab73e6ac9bf4bf3c6931570.jpeg" alt="mala + Ayush"
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">mala + Ayush</span>
-                                <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
+                                <span class="title text-base">mala + Ayush</span>
+                                <span class="subtitle text-sm">Playlist • Spotify</span>
                             </div>
                         </div>
 
                         <!-- Charlie Puth -->
-                        <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
+                        <div class="library-item flex items-center gap-3">
                             <div class="relative h-12 w-12 overflow-hidden rounded-md shrink-0">
                                 <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg" alt="Charlie Puth"
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Charlie Puth</span>
-                                <span class="text-sm text-[#a7a7a7]">Artist</span>
+                                <span class="title text-base">Charlie Puth</span>
+                                <span class="subtitle text-sm">Artist</span>
                             </div>
                         </div>
 
@@ -721,7 +809,7 @@
                                     alt="smooth changing mood" class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">smooth changing mood</span>
+                                <span class="text-base font-bold text-base">smooth changing mood</span>
                                 <span class="text-sm text-[#a7a7a7]">Playlist • Joy :3</span>
                             </div>
                         </div>
@@ -733,7 +821,7 @@
                                     alt="Trending Songs Hindi" class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Trending Songs Hindi 2025 - Best Viral
+                                <span class="text-base font-bold text-base">Trending Songs Hindi 2025 - Best Viral
                                     Hindi...</span>
                                 <span class="text-sm text-[#a7a7a7]">Playlist • Zusic</span>
                             </div>
@@ -749,7 +837,7 @@
                                     2</div>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Daily Mix 2</span>
+                                <span class="text-base font-bold text-base">Daily Mix 2</span>
                                 <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
                             </div>
                         </div>
@@ -761,7 +849,7 @@
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">pianime</span>
+                                <span class="text-base font-bold text-base">pianime</span>
                                 <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
@@ -773,7 +861,7 @@
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Manu Pilas</span>
+                                <span class="text-base font-bold text-base">Manu Pilas</span>
                                 <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
@@ -785,7 +873,7 @@
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Anime Now</span>
+                                <span class="text-base font-bold text-base">Anime Now</span>
                                 <span class="text-sm text-[#a7a7a7]">Playlist • Spotify</span>
                             </div>
                         </div>
@@ -797,7 +885,7 @@
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Akano</span>
+                                <span class="text-base font-bold text-base">Akano</span>
                                 <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
@@ -806,10 +894,10 @@
                         <div class="flex items-center gap-3 rounded-md p-2 hover:bg-[#232323] cursor-pointer">
                             <div
                                 class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-black flex items-center justify-center">
-                                <i data-lucide="music" class="h-6 w-6 text-white"></i>
+                                <i data-lucide="music" class="h-6 w-6 text-base"></i>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">Geek Music</span>
+                                <span class="text-base font-bold text-base">Geek Music</span>
                                 <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
@@ -821,7 +909,7 @@
                                     class="object-cover h-full w-full">
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-base font-bold text-white">A.R. Rahman</span>
+                                <span class="text-base font-bold text-base">A.R. Rahman</span>
                                 <span class="text-sm text-[#a7a7a7]">Artist</span>
                             </div>
                         </div>
@@ -830,147 +918,17 @@
             </div>
 
             <!-- Main Content -->
-            <div class="relative overflow-hidden">
+            <div class="relative overflow-hidden bg-background-base rounded-xl ">
                 <div class="absolute inset-0 flex flex-col" style="background-color: var(--background-base);">
-                    <header class="flex items-center justify-between p-4">
-                        <div class="flex items-center gap-2">
-                            <button
-                                class="h-8 w-8 rounded-full flex items-center justify-center"
-                                style="background-color: var(--background-tinted-base); color: var(--text-base);">
-                                <i data-lucide="chevron-left" class="h-5 w-5"></i>
-                            </button>
-                            <button
-                                class="h-8 w-8 rounded-full flex items-center justify-center"
-                                style="background-color: var(--background-tinted-base); color: var(--text-base);">
-                                <i data-lucide="chevron-right" class="h-5 w-5"></i>
-                            </button>
+                    <div id="main-content" class="isolate h-full overflow-y-auto scrollbar-hide">
+                        <div class="w-full h-1/4 absolute top-0 -z-[1] left-0 pointer-events-none"
+                            style="background: linear-gradient(var(--bg-gradient-start) 0,var(--bg-gradient-end) 100%);">
+
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                                <i data-lucide="sun" class="h-5 w-5 dark-mode-only"></i>
-                                <i data-lucide="moon" class="h-5 w-5 light-mode-only hidden"></i>
-                            </button>
-                            <button class="text-sm font-medium px-4 py-2 rounded-full hover:scale-105"
-                                style="color: var(--text-base);">
-                                Sign up
-                            </button>
-                            <button
-                                class="px-4 py-2 rounded-full hover:scale-105 hover:opacity-90"
-                                style="background-color: var(--essential-base); color: var(--background-base);">
-                                Log in
-                            </button>
-                        </div>
-                    </header>
-                    <div id="main-content" class="h-full overflow-y-auto scrollbar-hide">
                         <div class="p-6">
-                            <h1 class="text-2xl font-bold" style="color: var(--text-primary);">Good afternoon</h1>
-                            <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
-                                <!-- Top Playlist 1 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="liked-songs">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f00000002db51470ffe92dddd624dab8e.jpeg"
-                                            alt="Liked Songs" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Liked Songs</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- Top Playlist 2 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="discover-weekly">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f00000002bbcbed9525de853449ebd028.jpeg"
-                                            alt="Discover Weekly" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Discover Weekly</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- Top Playlist 3 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="daily-mix-1">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f000000029528f6707bdd37467b98824a.jpeg"
-                                            alt="Daily Mix 1" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Daily Mix 1</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- Top Playlist 4 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="chill-hits">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f00000002e863ce9df6955fed82d56257.jpeg" alt="Chill Hits"
-                                            class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Chill Hits</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- Top Playlist 5 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="rock-classics">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67706f00000002a1b8f967c83f8a234ab92444.jpeg"
-                                            alt="Rock Classics" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Rock Classics</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- Top Playlist 6 -->
-                                <div
-                                    class="group flex items-center gap-4 rounded-md bg-[#ffffff12] p-2 transition-colors hover:bg-[#ffffff20] cursor-pointer"
-                                    data-playlist-id="hip-hop-mix">
-                                    <div
-                                        class="relative h-12 w-12 overflow-hidden rounded-md shrink-0 bg-[#333333] flex-shrink-0">
-                                        <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
-                                            alt="Hip Hop Mix" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="text-sm font-medium text-white">Hip Hop Mix</span>
-                                    <div class="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                                        <button
-                                            class="h-10 w-10 rounded-full bg-[#1db954] text-black shadow-sm hover:bg-[#1ed760] flex items-center justify-center playlist-play-button">
-                                            <i data-lucide="play" class="h-5 w-5 fill-current"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- It's New Music Friday Section -->
-                            <div class="section-header mt-8">
+                            <div class="section-header ">
                                 <h2 class="section-title">It's New Music Friday!</h2>
                                 <a href="#" class="section-link">Show all</a>
                             </div>
@@ -982,10 +940,7 @@
                                     <!-- New Music Friday -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden transition-colors cursor-pointer"
-                                            style="background-color: var(--background-card);"
-                                            onmouseover="this.style.backgroundColor = 'var(--background-card-hover)';"
-                                            onmouseout="this.style.backgroundColor = 'var(--background-card)';">
+                                            class="group rounded-lg overflow-hidden transition-colors cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg"
                                                     alt="New Music Friday India" class="h-44 w-full object-cover">
@@ -998,8 +953,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">New Music Friday</h3>
-                                                <p class="mt-1 text-sm text-white/70">Handpicked fresh new international
+                                                <h3 class="text-base font-bold text-base">New Music Friday</h3>
+                                                <p class="mt-1 text-sm text-base/70">Handpicked fresh new international
                                                     music from...</p>
                                             </div>
                                         </div>
@@ -1008,7 +963,7 @@
                                     <!-- Release Radar -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg"
                                                     alt="Release Radar" class="h-44 w-full object-cover">
@@ -1021,8 +976,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Release Radar</h3>
-                                                <p class="mt-1 text-sm text-white/70">Catch all the latest music from
+                                                <h3 class="text-base font-bold text-base">Release Radar</h3>
+                                                <p class="mt-1 text-sm text-base/70">Catch all the latest music from
                                                     artists you follow</p>
                                             </div>
                                         </div>
@@ -1031,7 +986,7 @@
                                     <!-- Latest Romance Telugu -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
                                                     alt="Latest Romance Telugu" class="h-44 w-full object-cover">
@@ -1044,8 +999,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Latest Romance Telugu</h3>
-                                                <p class="mt-1 text-sm text-white/70">Bringing out the best of latest
+                                                <h3 class="text-base font-bold text-base">Latest Romance Telugu</h3>
+                                                <p class="mt-1 text-sm text-base/70">Bringing out the best of latest
                                                     love tracks</p>
                                             </div>
                                         </div>
@@ -1054,7 +1009,7 @@
                                     <!-- Latest Love Tamil -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg"
                                                     alt="Latest Love Tamil" class="h-44 w-full object-cover">
@@ -1067,8 +1022,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Latest Love Tamil</h3>
-                                                <p class="mt-1 text-sm text-white/70">Check out the Latest Romance
+                                                <h3 class="text-base font-bold text-base">Latest Love Tamil</h3>
+                                                <p class="mt-1 text-sm text-base/70">Check out the Latest Romance
                                                     Tracks</p>
                                             </div>
                                         </div>
@@ -1077,7 +1032,7 @@
                                     <!-- Latest Dance Telugu -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
                                                     alt="Latest Dance Telugu" class="h-44 w-full object-cover">
@@ -1090,8 +1045,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Latest Dance Telugu</h3>
-                                                <p class="mt-1 text-sm text-white/70">Head to the dance floor with these
+                                                <h3 class="text-base font-bold text-base">Latest Dance Telugu</h3>
+                                                <p class="mt-1 text-sm text-base/70">Head to the dance floor with these
                                                     latest Telugu hits</p>
                                             </div>
                                         </div>
@@ -1100,7 +1055,7 @@
                                     <!-- New in Dance -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
                                                     alt="New in Dance" class="h-44 w-full object-cover">
@@ -1113,8 +1068,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">New in Dance</h3>
-                                                <p class="mt-1 text-sm text-white/70">Feel the heat & get high on the
+                                                <h3 class="text-base font-bold text-base">New in Dance</h3>
+                                                <p class="mt-1 text-sm text-base/70">Feel the heat & get high on the
                                                     dance floor</p>
                                             </div>
                                         </div>
@@ -1127,8 +1082,8 @@
 
                             <!-- Made For You Section -->
                             <div class="section-header mt-8">
-                                <h2 class="text-2xl font-bold text-white">Made For Ayush Shah</h2>
-                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                                <h2 class="text-2xl font-bold text-base">Made For Ayush Shah</h2>
+                                <a href="#" class="text-sm font-bold text-base/70 hover:text-base">Show all</a>
                             </div>
                             <div class="carousel-container">
                                 <button class="carousel-nav-button carousel-nav-prev" data-carousel="made-for-you">
@@ -1160,7 +1115,7 @@
                                     <!-- Daily Mix 2 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg"
                                                     alt="Daily Mix 2" class="h-44 w-full object-cover">
@@ -1173,8 +1128,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Daily Mix 2</h3>
-                                                <p class="mt-1 text-sm text-white/70">The latest from Bollywood
+                                                <h3 class="text-base font-bold text-base">Daily Mix 2</h3>
+                                                <p class="mt-1 text-sm text-base/70">The latest from Bollywood
                                                     blockbusters</p>
                                             </div>
                                         </div>
@@ -1183,7 +1138,7 @@
                                     <!-- Daily Mix 3 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
                                                     alt="Daily Mix 3" class="h-44 w-full object-cover">
@@ -1196,8 +1151,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Daily Mix 3</h3>
-                                                <p class="mt-1 text-sm text-white/70">Arijit Singh, Atif Aslam, and more
+                                                <h3 class="text-base font-bold text-base">Daily Mix 3</h3>
+                                                <p class="mt-1 text-sm text-base/70">Arijit Singh, Atif Aslam, and more
                                                 </p>
                                             </div>
                                         </div>
@@ -1206,7 +1161,7 @@
                                     <!-- Daily Mix 4 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg"
                                                     alt="Daily Mix 4" class="h-44 w-full object-cover">
@@ -1219,8 +1174,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Daily Mix 4</h3>
-                                                <p class="mt-1 text-sm text-white/70">Aditya Rikhari, The Local Train
+                                                <h3 class="text-base font-bold text-base">Daily Mix 4</h3>
+                                                <p class="mt-1 text-sm text-base/70">Aditya Rikhari, The Local Train
                                                     and more</p>
                                             </div>
                                         </div>
@@ -1229,7 +1184,7 @@
                                     <!-- Daily Mix 5 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg"
                                                     alt="Daily Mix 5" class="h-44 w-full object-cover">
@@ -1242,8 +1197,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Daily Mix 5</h3>
-                                                <p class="mt-1 text-sm text-white/70">Geek Music, Miura Jam, RADWIMPS
+                                                <h3 class="text-base font-bold text-base">Daily Mix 5</h3>
+                                                <p class="mt-1 text-sm text-base/70">Geek Music, Miura Jam, RADWIMPS
                                                     and more</p>
                                             </div>
                                         </div>
@@ -1252,7 +1207,7 @@
                                     <!-- Discover Weekly -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
                                                     alt="Discover Weekly" class="h-44 w-full object-cover">
@@ -1265,8 +1220,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Discover Weekly</h3>
-                                                <p class="mt-1 text-sm text-white/70">Your weekly mixtape of fresh music
+                                                <h3 class="text-base font-bold text-base">Discover Weekly</h3>
+                                                <p class="mt-1 text-sm text-base/70">Your weekly mixtape of fresh music
                                                 </p>
                                             </div>
                                         </div>
@@ -1279,8 +1234,8 @@
 
                             <!-- Popular albums and singles -->
                             <div class="section-header mt-8">
-                                <h2 class="text-2xl font-bold text-white">Popular albums and singles</h2>
-                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                                <h2 class="text-2xl font-bold text-base">Popular albums and singles</h2>
+                                <a href="#" class="text-sm font-bold text-base/70 hover:text-base">Show all</a>
                             </div>
                             <div class="carousel-container">
                                 <button class="carousel-nav-button carousel-nav-prev" data-carousel="popular-albums">
@@ -1290,7 +1245,7 @@
                                     <!-- Album 1 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273ad204486839062991becfbc9.jpeg"
                                                     alt="Jashm-E-Ishq" class="h-44 w-full object-cover">
@@ -1303,8 +1258,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Jashm-E-Ishq</h3>
-                                                <p class="mt-1 text-sm text-white/70">By Arijit Singh</p>
+                                                <h3 class="text-base font-bold text-base">Jashm-E-Ishq</h3>
+                                                <p class="mt-1 text-sm text-base/70">By Arijit Singh</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1312,7 +1267,7 @@
                                     <!-- Album 2 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg"
                                                     alt="Aashiqui 2" class="h-44 w-full object-cover">
@@ -1325,8 +1280,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Aashiqui 2</h3>
-                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                                <h3 class="text-base font-bold text-base">Aashiqui 2</h3>
+                                                <p class="mt-1 text-sm text-base/70">By Various Artists</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1334,7 +1289,7 @@
                                     <!-- Album 3 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg"
                                                     alt="Tamasha" class="h-44 w-full object-cover">
@@ -1347,8 +1302,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Tamasha</h3>
-                                                <p class="mt-1 text-sm text-white/70">By A.R. Rahman</p>
+                                                <h3 class="text-base font-bold text-base">Tamasha</h3>
+                                                <p class="mt-1 text-sm text-base/70">By A.R. Rahman</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1356,7 +1311,7 @@
                                     <!-- Album 4 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b273d2be316742edcc853ea55141.jpeg"
                                                     alt="Kabir Singh" class="h-44 w-full object-cover">
@@ -1369,8 +1324,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Kabir Singh</h3>
-                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                                <h3 class="text-base font-bold text-base">Kabir Singh</h3>
+                                                <p class="mt-1 text-sm text-base/70">By Various Artists</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1378,7 +1333,7 @@
                                     <!-- Album 5 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg"
                                                     alt="Retro Classics" class="h-44 w-full object-cover">
@@ -1391,8 +1346,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Retro Classics</h3>
-                                                <p class="mt-1 text-sm text-white/70">By Various Artists</p>
+                                                <h3 class="text-base font-bold text-base">Retro Classics</h3>
+                                                <p class="mt-1 text-sm text-base/70">By Various Artists</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1404,8 +1359,8 @@
 
                             <!-- New Artists to Follow Section (Using the new images) -->
                             <div class="section-header mt-8">
-                                <h2 class="text-2xl font-bold text-white">New Artists to Follow</h2>
-                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                                <h2 class="text-2xl font-bold text-base">New Artists to Follow</h2>
+                                <a href="#" class="text-sm font-bold text-base/70 hover:text-base">Show all</a>
                             </div>
                             <div class="carousel-container">
                                 <button class="carousel-nav-button carousel-nav-prev" data-carousel="new-artists">
@@ -1415,7 +1370,7 @@
                                     <!-- Artist 1 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab676161000051745ba2d75eb08a2d672f9b69b7.jpg"
                                                     alt="AR Rahman" class="h-44 w-full object-cover">
@@ -1428,8 +1383,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">AR Rahman</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">AR Rahman</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1437,7 +1392,7 @@
                                     <!-- Artist 2 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab6761610000517490b6c3d093f9b02aad628eaf.jpg"
                                                     alt="Arijit Singh" class="h-44 w-full object-cover">
@@ -1450,8 +1405,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Arijit Singh</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Arijit Singh</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1459,7 +1414,7 @@
                                     <!-- Artist 3 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab676161000051749415df28058107b5d54f9fad.jpg"
                                                     alt="Pritam" class="h-44 w-full object-cover">
@@ -1472,8 +1427,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Pritam</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Pritam</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1481,7 +1436,7 @@
                                     <!-- Artist 4 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e0225202a8c5fd594b8e8ee2d5e.jpg"
                                                     alt="Shreya Ghoshal" class="h-44 w-full object-cover">
@@ -1494,8 +1449,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Shreya Ghoshal</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Shreya Ghoshal</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1503,7 +1458,7 @@
                                     <!-- Artist 5 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616100005174b19af0ea736c6228d6eb539c.jpg"
                                                     alt="Badshah" class="h-44 w-full object-cover">
@@ -1516,8 +1471,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Badshah</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Badshah</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1525,7 +1480,7 @@
                                     <!-- Artist 6 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e024c81f86297c2e3fac6a4c6cd.jpg"
                                                     alt="Neha Kakkar" class="h-44 w-full object-cover">
@@ -1538,8 +1493,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Neha Kakkar</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Neha Kakkar</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1547,7 +1502,7 @@
                                     <!-- Artist 7 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab676161000051748de0e6e7e55d7773931ab7f4.jpg"
                                                     alt="Jubin Nautiyal" class="h-44 w-full object-cover">
@@ -1560,8 +1515,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Jubin Nautiyal</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Jubin Nautiyal</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1569,7 +1524,7 @@
                                     <!-- Artist 8 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e02a5183fa4b99bcec1f506418d.jpg"
                                                     alt="Darshan Raval" class="h-44 w-full object-cover">
@@ -1582,8 +1537,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Darshan Raval</h3>
-                                                <p class="mt-1 text-sm text-white/70">Artist</p>
+                                                <h3 class="text-base font-bold text-base">Darshan Raval</h3>
+                                                <p class="mt-1 text-sm text-base/70">Artist</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1595,8 +1550,8 @@
 
                             <!-- Trending Now Section (Using more new images) -->
                             <div class="section-header mt-8">
-                                <h2 class="text-2xl font-bold text-white">Trending Now</h2>
-                                <a href="#" class="text-sm font-bold text-white/70 hover:text-white">Show all</a>
+                                <h2 class="text-2xl font-bold text-base">Trending Now</h2>
+                                <a href="#" class="text-sm font-bold text-base/70 hover:text-base">Show all</a>
                             </div>
                             <div class="carousel-container">
                                 <button class="carousel-nav-button carousel-nav-prev" data-carousel="trending-now">
@@ -1606,7 +1561,7 @@
                                     <!-- Trending 1 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e02931b61b7382db17ed15e75fc.jpg"
                                                     alt="Top Hits India" class="h-44 w-full object-cover">
@@ -1619,8 +1574,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Top Hits India</h3>
-                                                <p class="mt-1 text-sm text-white/70">Hottest tracks in India right now
+                                                <h3 class="text-base font-bold text-base">Top Hits India</h3>
+                                                <p class="mt-1 text-sm text-base/70">Hottest tracks in India right now
                                                 </p>
                                             </div>
                                         </div>
@@ -1629,7 +1584,7 @@
                                     <!-- Trending 2 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e0283141000ee8ce3b893a0b425.jpg"
                                                     alt="Viral Hits" class="h-44 w-full object-cover">
@@ -1642,8 +1597,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Viral Hits</h3>
-                                                <p class="mt-1 text-sm text-white/70">Tracks going viral right now</p>
+                                                <h3 class="text-base font-bold text-base">Viral Hits</h3>
+                                                <p class="mt-1 text-sm text-base/70">Tracks going viral right now</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1651,7 +1606,7 @@
                                     <!-- Trending 3 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e0293145000ee8ce3b893a0b425.jpg"
                                                     alt="Party Mix" class="h-44 w-full object-cover">
@@ -1664,8 +1619,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Party Mix</h3>
-                                                <p class="mt-1 text-sm text-white/70">Best party anthems for your night
+                                                <h3 class="text-base font-bold text-base">Party Mix</h3>
+                                                <p class="mt-1 text-sm text-base/70">Best party anthems for your night
                                                 </p>
                                             </div>
                                         </div>
@@ -1674,7 +1629,7 @@
                                     <!-- Trending 4 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e02c60d50433ca011cd40e62f25.jpg"
                                                     alt="Bollywood Dance" class="h-44 w-full object-cover">
@@ -1687,8 +1642,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Bollywood Dance</h3>
-                                                <p class="mt-1 text-sm text-white/70">High-energy Bollywood dance tracks
+                                                <h3 class="text-base font-bold text-base">Bollywood Dance</h3>
+                                                <p class="mt-1 text-sm text-base/70">High-energy Bollywood dance tracks
                                                 </p>
                                             </div>
                                         </div>
@@ -1697,7 +1652,7 @@
                                     <!-- Trending 5 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/ab67616d00001e02a9b2413400021a9912bdab1f6.jpg"
                                                     alt="Global Top 50" class="h-44 w-full object-cover">
@@ -1710,8 +1665,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Global Top 50</h3>
-                                                <p class="mt-1 text-sm text-white/70">Top 50 songs globally</p>
+                                                <h3 class="text-base font-bold text-base">Global Top 50</h3>
+                                                <p class="mt-1 text-sm text-base/70">Top 50 songs globally</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1719,7 +1674,7 @@
                                     <!-- Trending 6 -->
                                     <div class="carousel-item w-44">
                                         <div
-                                            class="group rounded-lg overflow-hidden bg-[#181818] transition-colors hover:bg-[#282828] cursor-pointer">
+                                            class="group rounded-lg overflow-hidden background-card transition-colors hover:bg-background-highlight cursor-pointer">
                                             <div class="relative">
                                                 <img src="images/region_global_default.jpg"
                                                     alt="Chart Topper" class="h-44 w-full object-cover">
@@ -1732,8 +1687,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-4">
-                                                <h3 class="text-base font-bold text-white">Chart Toppers</h3>
-                                                <p class="mt-1 text-sm text-white/70">Biggest hits on the charts</p>
+                                                <h3 class="text-base font-bold text-base">Chart Toppers</h3>
+                                                <p class="mt-1 text-sm text-base/70">Biggest hits on the charts</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1818,7 +1773,7 @@
                             <i data-lucide="laptop-2" class="h-4 w-4"></i>
                         </button>
                         <div class="flex items-center gap-2">
-                            <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                            <button class="h-8 w-8 text-base/70 hover:text-base flex items-center justify-center">
                                 <i data-lucide="volume-2" class="h-4 w-4"></i>
                             </button>
                             <div class="relative w-20 h-1 bg-white/20 rounded-full cursor-pointer group">
@@ -1828,7 +1783,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="h-8 w-8 text-white/70 hover:text-white flex items-center justify-center">
+                        <button class="h-8 w-8 text-base/70 hover:text-base flex items-center justify-center">
                             <i data-lucide="maximize-2" class="h-4 w-4"></i>
                         </button>
                     </div>
@@ -1866,33 +1821,8 @@
                     });
                 });
 
-                // Sidebar toggle functionality
-                const sidebarToggle = document.getElementById('sidebar-toggle');
-                const sidebar = document.getElementById('sidebar');
-                const toggleIcon = document.querySelector('.toggle-icon');
-                const closeIcon = document.querySelector('.close-icon');
-                const collapsedPlusButton = document.querySelector('.mt-4.flex.justify-center.items-center');
-
-                // Initially hide the collapsed state plus button if sidebar is expanded
-                if (!sidebar.classList.contains('collapsed')) {
-                    collapsedPlusButton.style.display = 'none';
-                }
-
-                sidebarToggle.addEventListener('click', function () {
-                    sidebar.classList.toggle('collapsed');
-
-                    // Toggle visibility of the plus button based on sidebar state
-                    if (sidebar.classList.contains('collapsed')) {
-                        toggleIcon.setAttribute('data-lucide', 'chevron-right');
-                        collapsedPlusButton.style.display = 'flex';
-                    } else {
-                        toggleIcon.setAttribute('data-lucide', 'chevron-left');
-                        collapsedPlusButton.style.display = 'none';
-                    }
-                    lucide.createIcons(); // Recreate icons to update the toggle icon
-                });
-
-                // Theme toggle functionality
+                // Remove sidebar toggle functionality as sidebar-toggle element doesn't exist
+                // Focus only on the theme toggle functionality
                 const themeToggle = document.getElementById('theme-toggle');
                 const body = document.body;
                 const sunIcon = document.querySelector('.dark-mode-only');
@@ -1908,6 +1838,8 @@
 
                     // Update icon visibility based on current theme
                     updateThemeIcons(savedTheme);
+
+                    console.log('Theme initialized as:', savedTheme); // Debug log
                 }
 
                 // Toggle theme on button click
