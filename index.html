@@ -13,6 +13,32 @@
                 theme: {
                     extend: {
                         colors: {
+                            "background-base": "var(--background-base)",
+                            "background-card": "var(--background-card)",
+                            "background-card-hover": "var(--background-card-hover)",
+                            "text-primary": "var(--text-primary)",
+                            "text-subdued": "var(--text-subdued)",
+                            "brand-color": "var(--brand-color)",
+                            "gradient-start": "var(--gradient-start)",
+                            "background-elevated-base": "var(--background-elevated-base)",
+                            "background-page": "var(--background-page)",
+                            "background-base": "var(--background-base)",
+                            "background-card": "var(--background-card)",
+                            "background-card-hover": "var(--background-card-hover)",
+                            "text-primary": "var(--text-primary)",
+                            "text-subdued": "var(--text-subdued)",
+                            "brand-color": "var(--brand-color)",
+                            "border-color": "var(--border-color)",
+                            "background-highlight": "var(--background-highlight)",
+                            "background-elevated-base": "var(--background-elevated-base)",
+                            "background-tinted-base": "var(--background-tinted-base)",
+                            "essential-base": "var(--essential-base)",
+                            "text-base": "var(--text-base)",
+                            "text-secondary": "var(--text-secondary)",
+                            "gradient-start": "var(--gradient-start)",
+                            "background-page": "var(--background-page)",
+                            "background-elevated-base": "var(--background-elevated-base)",
+
                             spotify: {
                                 green: '#1DB954',
                                 greenHover: '#1ED760',
@@ -40,6 +66,7 @@
                 --now-playing-height: 90px;
                 --gradient-start: #533051;
                 --background-page: #000;
+                --background-elevated-base: #1f1f1f;
             }
 
             /* Light theme variables */
@@ -61,6 +88,7 @@
                 --background-page: #fff;
                 --bg-gradient-start: rgba(0, 0, 0, .1);
                 --bg-gradient-end: rgba(0, 0, 0, 0);
+                --background-elevated-base: #eaeaea;
             }
 
             /* Dark theme variables - adding extra variables that are used but not defined in :root */
@@ -73,6 +101,7 @@
                 --text-base: #ffffff;
                 --text-secondary: #a7a7a7;
                 --gradient-start: #533051;
+                --background-elevated-base: #1f1f1f;
                 --bg-gradient-start: rgba(255, 255, 255, .1);
                 --bg-gradient-end: rgba(255, 255, 255, 0);
             }
@@ -676,14 +705,15 @@
                 <!-- Search bar (center) - aligned exactly as in screenshot -->
                 <div class="flex gap-2">
                     <!-- Home icon -->
-                    <a href="#" class="p-2 w-4 h-4 rounded-full">
-                        <a href="#" class="flex items-center gap-2 px-3 py-1.5 rounded-full ">
-                            <i data-lucide="home" class="h-5 w-5 text-base"></i>
+                    <a href="#" class="p-2 w-4 h-4 rounded-full ">
+                        <a href="#"
+                            class="flex items-center  shrink-0 bg-background-elevated-base gap-2 px-3 py-1.5 rounded-full ">
+                            <i data-lucide="home" class="h-5 w-5  text-base"></i>
                         </a>
                     </a>
 
                     <!-- Search bar -->
-                    <div class="flex-1 mx-4">
+                    <div class="flex-1 ">
                         <div class="relative flex items-center">
                             <div class="absolute left-3 text-base">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--text-base)">
@@ -694,9 +724,9 @@
                                 </svg>
                             </div>
                             <input type="text" placeholder="What do you want to play?"
-                                class="py-2 pl-10 pr-12  text-base w-full rounded-full border-none focus:outline-none " style="background-color: var(--background-base);" />
-                            <div class="w-px bg-background-base absolute right-[40px] bg-background-base h-6"></div>
-                            <div class="absolute right-2 text-base w-6 h-6">
+                                class="py-3 pl-12 pr-14 min-w-[300px] md:min-w-[450px]  text-base w-full rounded-full border-none focus:outline-none  bg-background-elevated-base" />
+                            <div class="w-px bg-background-base absolute right-[44px] bg-text-base h-6 "></div>
+                            <div class="absolute right-3 opacity-70 text-base w-6 h-6">
                                 <svg data-encore-id="icon" role="img" aria-hidden="true"
                                     fill="var(--text-base)"
                                     class="e-9812-icon e-9812-baseline " viewBox="0 0 24 24">
@@ -714,7 +744,8 @@
 
                 <!-- Right buttons -->
                 <div class="flex items-center gap-3">
-                    <a href="#" class="font-bold text-sm text-base">
+                    <a href="#"
+                        class="font-bold text-sm text-base bg-text-primary  text-background-base px-3 py-1.5 rounded-full">
                         Explore Premium
                     </a>
                     <a href="#" class="font-bold text-sm flex items-center gap-1.5 text-base">
