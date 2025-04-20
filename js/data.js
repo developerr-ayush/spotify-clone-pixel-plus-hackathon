@@ -109,7 +109,7 @@ const tracks = [
     album: "Dheere Dheere",
     duration: 230,
     coverImage: "images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg",
-    audioSrc: "audio/song-1.mp4"
+    audioSrc: "audio/dheere-dheere.mp4",
   },
   {
     id: 1,
@@ -118,8 +118,7 @@ const tracks = [
     album: "Aashiqui 2",
     duration: 243,
     coverImage: "images/ab67616d0000b273cab73e6ac9bf4bf3c6931570.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/tum-hi-ho.mp3",
   },
   {
     id: 2,
@@ -128,8 +127,7 @@ const tracks = [
     album: "Agent Vinod",
     duration: 215,
     coverImage: "images/ab67616d0000b273ad204486839062991becfbc9.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/raabta.mp3",
   },
   {
     id: 3,
@@ -138,8 +136,7 @@ const tracks = [
     album: "Ae Dil Hai Mushkil",
     duration: 260,
     coverImage: "images/ab67616d0000b2737881b6fe1d303657f9d409eb.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/channa-mereya.mp3",
   },
   {
     id: 4,
@@ -148,8 +145,7 @@ const tracks = [
     album: "Satyameva Jayate",
     duration: 198,
     coverImage: "images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/dilbar.mp3",
   },
   {
     id: 5,
@@ -158,8 +154,7 @@ const tracks = [
     album: "Tamasha",
     duration: 341,
     coverImage: "images/ab67616d0000b273e8acd7446270164f4806f9d2.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/agar-tum-saath-ho.mp3",
   },
   {
     id: 6,
@@ -168,8 +163,7 @@ const tracks = [
     album: "Brahmastra",
     duration: 242,
     coverImage: "images/ab67616d0000b2733b7ae221866b5e81daf4483f.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/kesariya.mp3",
   },
   {
     id: 7,
@@ -178,8 +172,7 @@ const tracks = [
     album: "Yeh Jawaani Hai Deewani",
     duration: 228,
     coverImage: "images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/badtameez-dil.mp3",
   },
   {
     id: 8,
@@ -188,8 +181,7 @@ const tracks = [
     album: "Kabir Singh",
     duration: 213,
     coverImage: "images/ab67616d0000b273d2be316742edcc853ea55141.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/tera-ban-jaunga.mp3",
   },
   {
     id: 9,
@@ -198,8 +190,7 @@ const tracks = [
     album: "Baaghi 2",
     duration: 269,
     coverImage: "images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/o-saathi.mp3",
   },
   {
     id: 10,
@@ -208,8 +199,7 @@ const tracks = [
     album: "Kalank",
     duration: 295,
     coverImage: "images/ab67616d0000b273ad204486839062991becfbc9.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/kalank.mp3",
   },
   // More tracks would go here...
   {
@@ -219,8 +209,7 @@ const tracks = [
     album: "Desi Kalakaar",
     duration: 312,
     coverImage: "images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/desi-kalakaar.mp3",
   },
   {
     id: 60,
@@ -229,8 +218,7 @@ const tracks = [
     album: "Hindi Medium",
     duration: 198,
     coverImage: "images/ab67616d0000b273d2ca4ba1030b7fefd8e53464.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/suit-suit.mp3",
   },
   {
     id: 70,
@@ -239,8 +227,7 @@ const tracks = [
     album: "Batti Gul Meter Chalu",
     duration: 218,
     coverImage: "images/ab67616d0000b27365ce8c712e4fb894bc88461b.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/dekhte-dekhte.mp3",
   },
   {
     id: 80,
@@ -249,8 +236,7 @@ const tracks = [
     album: "Kabir Singh",
     duration: 242,
     coverImage: "images/ab67616d0000b273d2be316742edcc853ea55141.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/tujhe-kitna-chahne-lage.mp3",
   },
   {
     id: 90,
@@ -259,8 +245,7 @@ const tracks = [
     album: "Love Aaj Kal",
     duration: 233,
     coverImage: "images/ab67616d0000b273ad204486839062991becfbc9.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/shayad.mp3",
   },
   {
     id: 100,
@@ -269,8 +254,7 @@ const tracks = [
     album: "War",
     duration: 208,
     coverImage: "images/ab67616d0000b27303966171b7ddc6f13a35d75c.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/ghungroo.mp3",
   },
   {
     id: 110,
@@ -279,8 +263,7 @@ const tracks = [
     album: "Kabir Singh",
     duration: 270,
     coverImage: "images/ab67616d0000b27308ec59b2157bff530072c42c.jpeg",
-    audioSrc: "audio/song-1.mp4"
-
+    audioSrc: "audio/bekhayali.mp3",
   },
 ];
 
