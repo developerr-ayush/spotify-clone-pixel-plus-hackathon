@@ -1813,56 +1813,58 @@
                 style="background-color: var(--background-card); border-top: 1px solid var(--border-color);">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <div class="relative h-14 w-14 overflow-hidden rounded-md flex-shrink-0"
+                        <div id="track-cover" class="relative h-14 w-14 overflow-hidden rounded-md flex-shrink-0"
                             style="background-color: var(--background-elevated-base);">
                             <img src="images/ab67616d00001e026404721c1943d5069f0805f3.jpeg" alt="Now playing"
                                 class="object-cover h-full w-full">
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium" style="color: var(--text-base);">Starboy</h4>
-                            <p class="text-xs" style="color: var(--text-secondary);">The Weeknd</p>
+                            <h4 id="track-title" class="text-sm font-medium" style="color: var(--text-base);">Starboy
+                            </h4>
+                            <p id="track-artist" class="text-xs" style="color: var(--text-secondary);">The Weeknd</p>
                         </div>
-                        <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                        <button id="like-button" class="h-8 w-8 flex items-center justify-center hover:opacity-80"
                             style="color: var(--text-secondary);">
                             <i data-lucide="heart" class="h-4 w-4"></i>
                         </button>
                     </div>
                     <div class="flex flex-col items-center gap-2 max-w-md w-full">
                         <div class="flex items-center gap-4">
-                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            <button id="shuffle-button"
+                                class="h-8 w-8 flex items-center justify-center hover:opacity-80"
                                 style="color: var(--text-secondary);">
                                 <i data-lucide="shuffle" class="h-4 w-4"></i>
                             </button>
-                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            <button id="prev-button" class="h-8 w-8 flex items-center justify-center hover:opacity-80"
                                 style="color: var(--text-secondary);">
                                 <i data-lucide="skip-back" class="h-4 w-4"></i>
                             </button>
-                            <button
+                            <button id="play-button"
                                 class="h-8 w-8 rounded-full flex items-center justify-center hover:opacity-90"
                                 style="background-color: var(--essential-base); color: var(--background-base);">
                                 <i data-lucide="play" class="h-4 w-4 fill-current"></i>
                             </button>
-                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            <button id="next-button" class="h-8 w-8 flex items-center justify-center hover:opacity-80"
                                 style="color: var(--text-secondary);">
                                 <i data-lucide="skip-forward" class="h-4 w-4"></i>
                             </button>
-                            <button class="h-8 w-8 flex items-center justify-center hover:opacity-80"
+                            <button id="repeat-button" class="h-8 w-8 flex items-center justify-center hover:opacity-80"
                                 style="color: var(--text-secondary);">
                                 <i data-lucide="repeat" class="h-4 w-4"></i>
                             </button>
                         </div>
                         <div class="flex w-full items-center gap-2">
-                            <span class="text-xs" style="color: var(--text-secondary);">1:23</span>
-                            <div class="relative w-full h-1 rounded-full cursor-pointer group"
+                            <span id="current-time" class="text-xs" style="color: var(--text-secondary);">0:00</span>
+                            <div id="progress-bar" class="relative w-full h-1 rounded-full cursor-pointer group"
                                 style="background-color: var(--background-tinted-base);">
-                                <div class="absolute h-full w-[30%] rounded-full"
+                                <div id="progress-fill" class="absolute h-full w-0 rounded-full"
                                     style="background-color: var(--essential-base);"></div>
-                                <div
-                                    class="absolute h-3 w-3 rounded-full -translate-y-1/3 left-[30%] opacity-0 group-hover:opacity-100"
+                                <div id="progress-handle"
+                                    class="absolute h-3 w-3 rounded-full -translate-y-1/3 left-0 opacity-0 group-hover:opacity-100"
                                     style="background-color: var(--essential-base);">
                                 </div>
                             </div>
-                            <span class="text-xs" style="color: var(--text-secondary);">3:45</span>
+                            <span id="total-time" class="text-xs" style="color: var(--text-secondary);">3:45</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -1882,9 +1884,10 @@
                             <button class="h-8 w-8 text-base/70 hover:text-base flex items-center justify-center">
                                 <i data-lucide="volume-2" class="h-4 w-4"></i>
                             </button>
-                            <div class="relative w-20 h-1 bg-white/20 rounded-full cursor-pointer group">
-                                <div class="absolute h-full w-[70%] bg-white rounded-full"></div>
-                                <div
+                            <div id="volume-bar"
+                                class="relative w-20 h-1 bg-white/20 rounded-full cursor-pointer group">
+                                <div id="volume-fill" class="absolute h-full w-[70%] bg-white rounded-full"></div>
+                                <div id="volume-handle"
                                     class="absolute h-3 w-3 bg-white rounded-full -translate-y-1/3 left-[70%] opacity-0 group-hover:opacity-100">
                                 </div>
                             </div>
@@ -1894,6 +1897,11 @@
                         </button>
                     </div>
                 </div>
+                <!-- Hidden audio element for playing the song -->
+                <audio id="audio-player" style="display: none;">
+                    <source src="audio/song-1.mp4" type="audio/mp4">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
         </div>
 
@@ -1978,6 +1986,10 @@
                 initializeTheme();
             });
         </script>
+
+        <!-- Data and Player JavaScript -->
+        <script src="js/data.js"></script>
+        <script src="js/player.js"></script>
     </body>
 
 </html>
